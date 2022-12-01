@@ -34,6 +34,10 @@ void InputHandler::handle(){
     player->fireball();
   }
 
+  if(IsKeyPressed(KEY_J)){
+    player->thrust();
+  }
+
   int motion = inputQueue.back().input;
   if(player->grounded){
     if(motion == 4){

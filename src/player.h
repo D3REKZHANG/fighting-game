@@ -32,6 +32,7 @@ class Player {
     void update();
     void draw();
     void fireball();
+    void thrust();
 };
 
 #endif

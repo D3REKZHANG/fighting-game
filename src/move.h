@@ -1,27 +1,27 @@
 #ifndef MOVE_H
 #define MOVE_H
 
+#include "animation.h"
 #include "raylib.h"
-#include<vector>
+#include <vector>
+
+enum FrameState { startup, active, recovery };
+
+struct Frame {
+  FrameState state;
+  Vector2 vel;
+};
 
 class Move {
 public:
-  Range range;
-  Spritesheet* spritesheet;
-  int currentFrame = 0;
-  int counter = 0;
-  int tickSpeed;
-  bool repeat;
-  bool active = false;
+  Animation* animation;
+  std::vector<Frame> frameData;
+  int current;
 
-  Animation(Spritesheet* spritesheet, int start, int stop, int tickSpeed, bool repeat=false);
-  Animation(Spritesheet* spritesheet, Vector2 start, Vector2 stop, int tickSpeed, bool repeat=false);
   void tick();
-  void draw(Vector2 pos);
-  void play();
-  void stop();
+  Frame getFrame();
+
 };
 
 #endif
-#include ""
 

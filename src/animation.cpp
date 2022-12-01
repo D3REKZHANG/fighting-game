@@ -36,12 +36,7 @@ void Animation::tick() {
 
 void Animation::draw(Vector2 pos) {
   int n = range.start + currentFrame;
-  //console::log(n);
-  float rx = (n-1) % spritesheet->width;
-  float ry = floor((n-1) / spritesheet->width);
-  float rw = spritesheet->dimensions.x;
-  float rh = spritesheet->dimensions.y;
-  DrawTextureRec(spritesheet->sheet, {rx*rw, ry*rh, rw, rh}, pos, WHITE );
+  spritesheet->draw(n, pos);
 }
 
 void Animation::play() {

@@ -10,6 +10,10 @@ public:
   int width, height;
 
   Spritesheet(Texture2D sheet, Vector2 dimensions);
+
+  void draw(int n, Vector2 pos);
+
+  void draw(int row, int col, Vector2 pos);
 };
 
 #endif
