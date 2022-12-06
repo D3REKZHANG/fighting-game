@@ -3,6 +3,7 @@
 #include "game.h"
 #include "spritesheet.h"
 #include "animation.h"
+#include "move.h"
 #include "util.cc"
 
 Player::Player(Color c, int x, int y, Vector2 size, Game* game, bool inverse):colour{c},pos{(float)x, (float)y},vel{0,0},size{size},game{game},grounded{true},inverse{inverse}{
@@ -20,13 +21,20 @@ void Player::loadAssets(){
   anim["special"] = new Animation(ss["main"], {5,14}, {4, 16}, 8);
   anim["thrust"] = new Animation(ss["celsius"], 2, 6, 3);
 
-  currentAnimation = anim["idle"];
-  currentAnimation->play();
-  console::log("asdf");
+  move["thrust"] = new Move(anim["thrust"], {
+    {startup, {0, 0}, 3},
+    {startup, {0, 0}, 3},
+    {active, {10, 0}, 6},
+    {recovery, {0, 0}, 2},
+    {recovery, {0, 0}, 2},
+    {recovery, {0, 0}, 2},
+  });
 }
 
 void Player::update(){
+  if(currentAction) currentAction->update();
   
+  // PHYSICS STUFF
   vel = Vector2Add(vel, accel);
   pos = Vector2Add(pos, vel);
 
@@ -40,9 +48,6 @@ void Player::update(){
 
   if(grounded) accel.y = 0;
   else accel.y = 3; // gravity
-  
-  // animations
-  currentAnimation->tick();
 }
 
 void Player::fireball(){
@@ -51,13 +56,12 @@ void Player::fireball(){
 }
 
 void Player::thrust(){
-  currentAnimation = anim["thrust"];
-  currentAnimation->play();
+  currentAction = move["thrust"];
 }
 
 void Player::draw(){
   DrawRectangleV(pos, size, colour);
-  currentAnimation->draw(pos);
+  if(currentAction) currentAction->draw(pos);
 }
 
 Player::~Player() {
@@ -66,5 +70,8 @@ Player::~Player() {
   }
   for(auto a : anim){
     delete a.second;
+  }
+  for(auto m : move){
+    delete m.second;
   }
 }

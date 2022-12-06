@@ -1,6 +1,5 @@
 #include "animation.h"
 #include "spritesheet.h"
-#include <cmath>
 #include "util.cc"
 
 Animation::Animation(Spritesheet* spritesheet, int start, int stop, int tickSpeed, bool repeat)

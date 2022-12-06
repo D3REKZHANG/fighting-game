@@ -3,24 +3,29 @@
 
 #include "animation.h"
 #include "raylib.h"
+#include "action.h"
 #include <vector>
 
-enum FrameState { startup, active, recovery };
+enum FrameState { none, startup, active, recovery };
 
 struct Frame {
-  FrameState state;
+  FrameState state = none;
   Vector2 vel;
+  int frameCount;
 };
 
-class Move {
+class Move : public Action {
 public:
   Animation* animation;
   std::vector<Frame> frameData;
-  int current;
+  int currentFrame = 0;
+  int counter = 0;
 
-  void tick();
+  Move(Animation* animation, std::vector<Frame> frameData);
+
+  void update();
+  void draw(Vector2 pos);
   Frame getFrame();
-
 };
 
 #endif

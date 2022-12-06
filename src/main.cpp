@@ -16,7 +16,7 @@ int main()
   game = new Game(screenWidth, screenHeight);
   game->reset();
 
-  InitWindow(screenWidth, screenHeight, "Badminton Network");
+  InitWindow(screenWidth, screenHeight, "Fighting Game");
 
   game->loadAssets();
 
@@ -24,7 +24,7 @@ int main()
 
   while (!WindowShouldClose())
   {
-    update();
+    game->update();
     draw();
   }
 
@@ -32,10 +32,6 @@ int main()
   delete game;
 
   return 0;
-}
-
-void update(){
-  game->update();
 }
 
 void draw()
@@ -50,5 +46,4 @@ void draw()
 
     game->draw();
   EndDrawing();
-  //----------------------------------------------------------------------------------
 }

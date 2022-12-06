@@ -3,6 +3,8 @@
 
 #include "raylib.h"
 #include "animation.h"
+#include "move.h"
+#include "action.h"
 #include <string>
 #include <unordered_map>
 
@@ -24,7 +26,9 @@ class Player {
     std::unordered_map<std::string, Texture2D> tx;
     std::unordered_map<std::string, Spritesheet*> ss;
     std::unordered_map<std::string, Animation*> anim;
+    std::unordered_map<std::string, Move*> move;
     Animation* currentAnimation = nullptr;
+    Action* currentAction = nullptr;
     
     Player(Color c, int x, int y, Vector2 size, Game* game, bool inverse);
     ~Player();

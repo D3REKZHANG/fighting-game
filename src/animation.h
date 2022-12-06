@@ -2,9 +2,8 @@
 #define ANIMATION_H
 
 #include "raylib.h"
-#include<vector>
-
-struct Spritesheet;
+#include "spritesheet.h"
+#include <vector>
 
 class Animation {
   struct Range {
