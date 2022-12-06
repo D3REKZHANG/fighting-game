@@ -24,7 +24,7 @@ void Player::loadAssets(){
   move["thrust"] = new Move(anim["thrust"], {
     {startup, {0, 0}, 3},
     {startup, {0, 0}, 3},
-    {active, {10, 0}, 6},
+    {active, {10, 0}, 10},
     {recovery, {0, 0}, 2},
     {recovery, {0, 0}, 2},
     {recovery, {0, 0}, 2},
