@@ -37,7 +37,7 @@ CFLAGS += -Wl,--subsystem,windows
 
 # Define include paths for required headers
 # NOTE: Several external required libraries (stb and others)
-INCLUDE_PATHS = -I. -Iinclude -Iinclude/external
+INCLUDE_PATHS = -Ilib -Ilib/external -Iinclude
 
 # Define library paths containing required libs.
 LDFLAGS = -Llib -lraylib
@@ -62,8 +62,9 @@ SRC_DIR = src
 # Default target entry
 all:
 	g++ ${SRC_DIR}/*.cpp -o game.exe $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
-	gdb ./game
-	run
+
+start:
+	gdb ./game -ex 'run'
 
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)

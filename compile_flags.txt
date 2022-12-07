@@ -1,2 +1,6 @@
 -I
+lib
+-I
 include
+-x
+c++
