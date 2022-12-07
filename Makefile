@@ -59,12 +59,19 @@ LDLIBS = -lopengl32 -lgdi32 -lwinmm
 
 SRC_DIR = src
 
+COMPILE = g++ ${SRC_DIR}/*.cpp -o game.exe $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+RUN_DEBUG = gdb game -ex 'run'
+
 # Default target entry
 all:
-	g++ ${SRC_DIR}/*.cpp -o game.exe $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+	${COMPILE}
+	${RUN_DEBUG}
+
+build:
+	${COMPILE}
 
 start:
-	gdb ./game -ex 'run'
+	${RUN_DEBUG}
 
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)
