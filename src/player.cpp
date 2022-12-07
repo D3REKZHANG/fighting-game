@@ -10,8 +10,8 @@ Player::Player(Color c, int x, int y, Vector2 size, Game* game, bool inverse):co
 }
 
 void Player::loadAssets(){
-  tx["spritesheet"] = LoadTexture("../assets/adventurer_sprite.png");
-  tx["cel_spritesheet"] = LoadTexture("../assets/celsius_thrust.png");
+  tx["spritesheet"] = LoadTexture("assets/adventurer_sprite.png");
+  tx["cel_spritesheet"] = LoadTexture("assets/celsius_thrust.png");
   ss["main"] = new Spritesheet(tx["spritesheet"], {50, 37});
   ss["celsius"] = new Spritesheet(tx["cel_spritesheet"], {400, 250});
 

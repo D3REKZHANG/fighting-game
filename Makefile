@@ -33,7 +33,7 @@ endif
 
 # resource file contains windows executable icon and properties
 # -Wl,--subsystem,windows hides the console window
-CFLAGS += -Wl,--subsystem,windows
+# CFLAGS += -Wl,--subsystem,windows
 
 # Define include paths for required headers
 # NOTE: Several external required libraries (stb and others)

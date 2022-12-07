@@ -1,7 +1,9 @@
 #include "game.h"
 #include "player.h"
 #include "inputHandler.h"
+#include "raylib.h"
 #include "spritesheet.h"
+#include "util.cc"
 #include <string>
 
 Game::Game(int width, int height):screenWidth{width},screenHeight{height}{
@@ -13,7 +15,7 @@ Game::Game(int width, int height):screenWidth{width},screenHeight{height}{
 }
 
 void Game::loadAssets(){
-  tx["motions"] = LoadTexture("../assets/motions.png");       
+  tx["motions"] = LoadTexture("assets/motions.png");       
 
   p1->loadAssets();
   p2->loadAssets();
