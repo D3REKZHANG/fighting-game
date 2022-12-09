@@ -6,8 +6,8 @@
 #include "move.h"
 #include "util.cc"
 
-Player::Player(Color c, int x, int y, Vector2 size, Game* game, bool inverse):colour{c},pos{(float)x, (float)y},vel{0,0},size{size},game{game},grounded{true},inverse{inverse}{
-}
+Player::Player(Color c, int x, int y, Vector2 size, Game* game, bool inverse)
+  : colour{c},pos{(float)x, (float)y},vel{0,0},size{size},game{game},state{IDLE},inverse{inverse} {}
 
 void Player::loadAssets(){
   tx["spritesheet"] = LoadTexture("assets/adventurer_sprite.png");
@@ -22,32 +22,36 @@ void Player::loadAssets(){
   anim["thrust"] = new Animation(ss["celsius"], 2, 6, 3);
 
   move["thrust"] = new Move(anim["thrust"], {
-    {startup, {0, 0}, 3},
-    {startup, {0, 0}, 3},
-    {active, {10, 0}, 10},
-    {recovery, {0, 0}, 2},
-    {recovery, {0, 0}, 2},
-    {recovery, {0, 0}, 2},
+    {STARTUP, {0, 0}, 5},
+    {STARTUP, {0, 0}, 5},
+    {ACTIVE, {10, 0}, 10},
+    {RECOVERY, {0, 0}, 5},
+    {RECOVERY, {0, 0}, 5},
+    {RECOVERY, {0, 0}, 5},
   });
+
+  setAnimation("idle");
 }
 
 void Player::update(){
-  if(currentAction) currentAction->update();
-  
+  if(currentAction) {
+    if(currentAction->update()){
+      currentAction = nullptr;
+    }
+  } 
   // PHYSICS STUFF
   vel = Vector2Add(vel, accel);
   pos = Vector2Add(pos, vel);
 
-  // adjust y position
-  if (pos.y >= game->getGroundPos()-size.y) {
-    pos.y = game->getGroundPos()-size.y;
-    grounded = true;
-  } else {
-    grounded = false;
+  if(state == JUMPING) {
+    if (pos.y >= game->getGroundPos()-size.y) {
+      pos.y = game->getGroundPos()-size.y;
+      state = IDLE;
+      accel.y = 0;
+    } else {
+      accel.y = 3; // gravity
+    }
   }
-
-  if(grounded) accel.y = 0;
-  else accel.y = 3; // gravity
 }
 
 void Player::fireball(){
@@ -56,12 +60,37 @@ void Player::fireball(){
 }
 
 void Player::thrust(){
-  currentAction = move["thrust"];
+  if(!currentAction){
+    currentAction = move["thrust"];
+    move["thrust"]->reset();
+  }
 }
 
 void Player::draw(){
-  DrawRectangleV(pos, size, colour);
-  if(currentAction) currentAction->draw(pos);
+  DrawText((currentAction)?"action":"nullptr", 50,400, 30, DARKGRAY);
+  DrawRectangleV(pos, {50,50}, GREEN);
+  if(currentAction){
+    FrameState state = static_cast<Move*>(currentAction)->getFrame().state;
+    Color color;
+    switch(state) {
+      case STARTUP: color = YELLOW; break;
+      case ACTIVE: color = RED; break;
+      case RECOVERY: color = BLUE; break;
+      case NONE: color = GRAY; break;
+    }
+    DrawRectangleV(pos, size, color);
+    currentAction->draw(pos);
+  } else {
+    currentAnimation->draw(pos);
+  }
+}
+
+bool Player::setAnimation(std::string anim_key){
+  if(anim.find(anim_key) == anim.end())
+    return false;
+
+  currentAnimation = anim[anim_key];
+  return true;
 }
 
 Player::~Player() {

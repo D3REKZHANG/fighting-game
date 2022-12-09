@@ -6,10 +6,10 @@
 #include "action.h"
 #include <vector>
 
-enum FrameState { none, startup, active, recovery };
+enum FrameState { NONE, STARTUP, ACTIVE, RECOVERY };
 
 struct Frame {
-  FrameState state = none;
+  FrameState state = NONE;
   Vector2 vel;
   int frameCount;
 };
@@ -23,9 +23,10 @@ public:
 
   Move(Animation* animation, std::vector<Frame> frameData);
 
-  void update();
+  bool update();
   void draw(Vector2 pos);
   Frame getFrame();
+  void reset();
 };
 
 #endif

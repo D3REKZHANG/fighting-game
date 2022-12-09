@@ -5,7 +5,7 @@
 
 class Action {
 public:
-  virtual void update() = 0;
+  virtual bool update() = 0;
   virtual void draw(Vector2 pos) = 0;
 };
 

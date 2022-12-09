@@ -14,13 +14,15 @@ struct MotionInput {
 };
 
 class InputHandler {
-  Game* game;
-  Player* player;
-  std::unordered_map<std::string, int> keyMap;
-  std::deque<MotionInput> inputQueue;
-  public:
-    InputHandler(Game* game, Player* player, std::unordered_map<std::string, int> keyMap);
+  private:
+    Game* game;
+    Player* player;
+    std::unordered_map<std::string, int> keyMap;
     void readInput();
+  public:
+    std::deque<MotionInput> inputQueue;
+
+    InputHandler(Game* game, Player* player, std::unordered_map<std::string, int> keyMap);
     void handle();
     void drawQueue();
 };

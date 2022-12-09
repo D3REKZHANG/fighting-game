@@ -13,7 +13,6 @@ void Spritesheet::draw(int n, Vector2 pos){
   float ry = floor((n-1) / width);
   float rw = dimensions.x;
   float rh = dimensions.y;
-  console::log(rh);
   DrawTextureRec(sheet, {rx*rw, ry*rh, rw, rh}, pos, WHITE);
 }
 

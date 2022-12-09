@@ -24,7 +24,30 @@ void InputHandler::readInput(){
     inputQueue.push_back({motion, GetTime()});
 }
 
+
 void InputHandler::handle(){
+  auto handleRun = [](Player* player, int motion) {
+    if(motion == 4 || motion == 6){
+      if(motion == 4) player->vel.x = -player->speed;
+      if(motion == 6) player->vel.x = player->speed;
+      return true;
+    }
+    return false;
+  };
+
+  auto handleJump = [](Player* player, int motion) {
+    if(motion == 7 || motion == 8 || motion == 9){
+      player->vel.y = -30;
+      player->vel.x = 0;
+      if(motion == 7)
+        player->vel.x = -player->speed;
+      if(motion == 9)
+        player->vel.x = player->speed;
+      return true;
+    }
+    return false;
+  };
+
   readInput();
 
   // check for motion inputs
@@ -39,24 +62,25 @@ void InputHandler::handle(){
   }
 
   int motion = inputQueue.back().input;
-  if(player->grounded){
-    if(motion == 4){
-      player->vel.x = -player->speed;
-    }
-    else if(motion == 6){
-      player->vel.x = player->speed;
-    }
-    else{
-      player->vel.x = 0;
-    }
-    if(motion == 7 || motion == 8 || motion == 9){
-      player->vel.y = -30;
-      player->vel.x = 0;
-      if(motion == 7)
-        player->vel.x = -player->speed;
-      if(motion == 9)
-        player->vel.x = player->speed;
-    }
+  switch(player->state){
+    case IDLE:
+      if(handleRun(player, motion))
+        player->state = RUNNING;
+        // set animation to running
+      if(handleJump(player, motion))
+        player->state = JUMPING;
+        // set animation to jumping
+      break;
+    case RUNNING:
+      handleRun(player, motion);
+      if(motion == 5){
+        player->vel.x = 0;
+        player->state = IDLE;
+        player->setAnimation("idle");
+      }
+      if(handleJump(player, motion))
+        player->state = JUMPING;
+      break;
   }
 
   // clear old inputs

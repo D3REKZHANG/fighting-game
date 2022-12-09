@@ -12,6 +12,14 @@ class Game;
 class Animation;
 class Spritesheet;
 
+enum State {
+  IDLE,
+  RUNNING,
+  JUMPING,
+  CROUCHING,
+  ATTACKING
+};
+
 class Player {
   public:
     Color colour;
@@ -20,7 +28,7 @@ class Player {
     Vector2 accel = {0,0};
     Vector2 size;
     Game* game;
-    bool grounded;
+    State state;
     bool inverse;
     float speed = 5;
     std::unordered_map<std::string, Texture2D> tx;
@@ -37,6 +45,7 @@ class Player {
     void draw();
     void fireball();
     void thrust();
+    bool setAnimation(std::string anim_key);
 };
 
 #endif
