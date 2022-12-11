@@ -4,8 +4,9 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "raylib.h"
 
-class console {
+class u {
 public:
   static void log(std::string s) {
     std::cout << s << std::endl;
@@ -17,6 +18,14 @@ public:
 
   static void log(int a, int b) {
     std::cout << a << ", " << b << std::endl;
+  }
+
+  static Vector2 topleft(Vector2 center_pos, float width, float height) {
+    return {center_pos.x - width/2, center_pos.y - height/2};
+  }
+
+  static Vector2 negate(Vector2 vec) {
+    return {-vec.x, -vec.y};
   }
 };
 

@@ -57,7 +57,7 @@ void InputHandler::handle(){
     player->fireball();
   }
 
-  if(IsKeyPressed(KEY_J)){
+  if(IsKeyPressed(keyMap["a"])){
     player->thrust();
   }
 

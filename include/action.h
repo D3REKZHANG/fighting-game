@@ -6,7 +6,7 @@
 class Action {
 public:
   virtual bool update() = 0;
-  virtual void draw(Vector2 pos) = 0;
+  virtual void draw(Vector2 pos, bool inverse=false) = 0;
 };
 
 

@@ -24,7 +24,7 @@ public:
   Move(Animation* animation, std::vector<Frame> frameData);
 
   bool update();
-  void draw(Vector2 pos);
+  void draw(Vector2 pos, bool inverse=false);
   Frame getFrame();
   void reset();
 };

@@ -23,7 +23,7 @@ enum State {
 class Player {
   public:
     Color colour;
-    Vector2 pos;
+    Vector2 pos = {0,0};
     Vector2 vel = {0,0};
     Vector2 accel = {0,0};
     Vector2 size;
@@ -38,7 +38,7 @@ class Player {
     Animation* currentAnimation = nullptr;
     Action* currentAction = nullptr;
     
-    Player(Color c, int x, int y, Vector2 size, Game* game, bool inverse);
+    Player(Color c, Vector2 size, Game* game, bool inverse);
     ~Player();
     void loadAssets();
     void update();

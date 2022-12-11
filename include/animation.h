@@ -22,7 +22,7 @@ public:
   Animation(Spritesheet* spritesheet, int start, int stop, int tickSpeed, bool repeat=false);
   Animation(Spritesheet* spritesheet, Vector2 start, Vector2 stop, int tickSpeed, bool repeat=false);
   void tick();
-  void draw(Vector2 pos);
+  void draw(Vector2 pos, bool inverse=false);
   void play();
   void stop();
 };

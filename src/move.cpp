@@ -5,12 +5,12 @@ Move::Move(Animation* animation, std::vector<Frame> frameData)
 : animation{animation}, frameData{frameData} {}
 
 bool Move::update(){
-  if(currentFrame == frameData.size()-1){
-    return true;
-  }
   if(counter != frameData[currentFrame].frameCount) {
     counter++;
     return false;
+  }
+  if(currentFrame == frameData.size()-1){
+    return true;
   }
   currentFrame++;
   animation->currentFrame++;
@@ -18,8 +18,8 @@ bool Move::update(){
   return false;
 }
 
-void Move::draw(Vector2 pos){
-  animation->draw(pos);
+void Move::draw(Vector2 pos, bool inverse){
+  animation->draw(pos, inverse);
 }
 
 Frame Move::getFrame(){

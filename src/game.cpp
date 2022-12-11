@@ -8,10 +8,10 @@
 
 Game::Game(int width, int height):screenWidth{width},screenHeight{height}{
   groundPosition = screenHeight - 50;
-  p1 = new Player(RED, 0, groundPosition-playerSize.y, playerSize, this, false);
-  p2 = new Player(BLUE, screenWidth - playerSize.x, groundPosition-playerSize.y, playerSize, this, true);
-  h1 = new InputHandler(this, p1, {{"left", KEY_A}, {"right", KEY_D}, {"up", KEY_W}, {"down", KEY_S}});
-  h2 = new InputHandler(this, p2, {{"left", KEY_LEFT},{"right", KEY_RIGHT},{"up", KEY_UP},{"down", KEY_DOWN}});
+  p1 = new Player(RED, playerSize, this, false);
+  p2 = new Player(BLUE, playerSize, this, true);
+  h1 = new InputHandler(this, p1, {{"left", KEY_A}, {"right", KEY_D}, {"up", KEY_W}, {"down", KEY_S}, {"a", KEY_J}});
+  h2 = new InputHandler(this, p2, {{"left", KEY_LEFT},{"right", KEY_RIGHT},{"up", KEY_UP},{"down", KEY_DOWN}, {"a", KEY_K}});
 }
 
 void Game::loadAssets(){
@@ -36,8 +36,8 @@ void Game::update(){
 }
 
 void Game::reset(){
-  p1->pos = {0, groundPosition-playerSize.y};
-  p2->pos = {screenWidth - playerSize.x, groundPosition-playerSize.y};
+  p1->pos = {playerSize.x, groundPosition-playerSize.y/2};
+  p2->pos = {screenWidth - playerSize.x, groundPosition-playerSize.y/2};
   player1Score = 0;
   player2Score = 0;
 }
