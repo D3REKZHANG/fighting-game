@@ -9,11 +9,18 @@
 
 InputHandler::InputHandler(Game* game, Player* player, std::unordered_map<std::string, int> keyMap):game{game},player{player},keyMap{keyMap}{}
 
+bool InputHandler::isDown(int key) {
+  if(keyMap.find("controller") != keyMap.end()){
+    return IsGamepadButtonDown(keyMap["controller"], key);
+  }
+  return IsKeyDown(key);
+};
+
 void InputHandler::readInput(){
   // 0 = left/up, 1 = neutral, 2 = right/down
   Vector2 key = {
-    static_cast<float>(IsKeyDown(keyMap["right"])-IsKeyDown(keyMap["left"])+1),
-    static_cast<float>(IsKeyDown(keyMap["up"])-IsKeyDown(keyMap["down"])+1)
+    static_cast<float>(isDown(keyMap["right"])-isDown(keyMap["left"])+1),
+    static_cast<float>(isDown(keyMap["up"])-isDown(keyMap["down"])+1)
   };
 
   // ternary conversion
@@ -57,7 +64,7 @@ void InputHandler::handle(){
     player->fireball();
   }
 
-  if(IsKeyPressed(keyMap["a"])){
+  if(isDown(keyMap["a"])){
     player->thrust();
   }
 

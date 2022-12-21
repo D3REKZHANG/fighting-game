@@ -12,6 +12,7 @@ Game::Game(int width, int height):screenWidth{width},screenHeight{height}{
   p2 = new Player(BLUE, playerSize, this, true);
   h1 = new InputHandler(this, p1, {{"left", KEY_A}, {"right", KEY_D}, {"up", KEY_W}, {"down", KEY_S}, {"a", KEY_J}});
   h2 = new InputHandler(this, p2, {{"left", KEY_LEFT},{"right", KEY_RIGHT},{"up", KEY_UP},{"down", KEY_DOWN}, {"a", KEY_K}});
+  h3 = new InputHandler(this, p1, {{"controller", 0}, {"left", 4},{"right", 2},{"up", 1},{"down", 3}, {"a", 5}});
 }
 
 void Game::loadAssets(){
@@ -25,11 +26,11 @@ void Game::draw(){
   DrawRectangle(0, groundPosition, screenWidth, 50, BLACK);
   p1->draw();
   p2->draw();
-  h1->drawQueue();
+  h3->drawQueue();
 }
 
 void Game::update(){
-  h1->handle();
+  h3->handle();
   h2->handle();
   p1->update();
   p2->update();

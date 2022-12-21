@@ -19,6 +19,7 @@ class InputHandler {
     Player* player;
     std::unordered_map<std::string, int> keyMap;
     void readInput();
+    bool isDown(int key);
   public:
     std::deque<MotionInput> inputQueue;
 
