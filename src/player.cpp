@@ -1,15 +1,15 @@
 #include "player.h"
+#include "inputReader.h"
 #include "raymath.h"
 #include "game.h"
 #include "spritesheet.h"
 #include "animation.h"
 #include "move.h"
-#include "util.cc"
+#include "util.h"
 
-Player::Player(Color c, Vector2 size, Game* game, bool inverse)
-  : colour{c},vel{0,0},size{size},game{game},state{IDLE},inverse{inverse} {}
-
-void Player::loadAssets(){
+Player::Player(Color c, Vector2 size, Game* game, InputReader* inputReader, bool inverse)
+  : colour{c},vel{0,0},size{size},game{game}, inverse{inverse}, inputReader{inputReader}
+{
   tx["spritesheet"] = LoadTexture("assets/adventurer_sprite.png");
   tx["cel_spritesheet"] = LoadTexture("assets/celsius_thrust.png");
   ss["main"] = new Spritesheet(tx["spritesheet"], {50, 37});
@@ -30,10 +30,14 @@ void Player::loadAssets(){
   });
 
   setAnimation("idle");
+  state = new ControlState();
 }
 
 void Player::update(){
-  if(currentAction) {
+  Input input = inputReader->read();
+  state->handleInput(this, inputReader->read());
+  state->update(this);
+  /* if(currentAction) {
     if(currentAction->update()){
       currentAction = nullptr;
       state = IDLE;
@@ -42,21 +46,7 @@ void Player::update(){
       vel = static_cast<Move*>(currentAction)->getFrame().vel;
       if(inverse) vel = u::negate(vel);
     }
-  } 
-  // PHYSICS STUFF
-  vel = Vector2Add(vel, accel);
-  pos = Vector2Add(pos, vel);
-
-  if(state == JUMPING) {
-    if (pos.y >= game->getGroundPos()-size.y/2) {
-      pos.y = game->getGroundPos()-size.y/2;
-      state = IDLE;
-      accel.y = 0;
-      vel = {0, 0};
-    } else {
-      accel.y = 3; // gravity
-    }
-  }
+  }  */
 }
 
 void Player::fireball(){
@@ -65,42 +55,44 @@ void Player::fireball(){
 }
 
 void Player::thrust(){
-  if(!currentAction){
-    currentAction = move["thrust"];
-    move["thrust"]->reset();
-    state = ATTACKING;
-    vel.x = 0;
-  }
+  // if(!currentAction){
+  //   currentAction = move["thrust"];
+  //   move["thrust"]->reset();
+  //   state = ATTACKING;
+  //   vel.x = 0;
+  // }
 }
 
 void Player::draw(){
   // collide box
-  DrawRectangleV(u::topleft(pos,size.x,size.y), size, GREEN);
+  // DrawRectangleV(u::topleft(pos,size.x,size.y), size, GREEN);
 
-  if(currentAction){
-    DrawText(std::to_string(static_cast<Move*>(currentAction)->currentFrame).c_str(), 50,400, 30, DARKGRAY);
-    DrawText(std::to_string(static_cast<Move*>(currentAction)->counter).c_str(), 50,450, 30, DARKGRAY);
-    FrameState state = static_cast<Move*>(currentAction)->getFrame().state;
-    Color color;
-    switch(state) {
-      case STARTUP: color = YELLOW; break;
-      case ACTIVE: color = RED; break;
-      case RECOVERY: color = BLUE; break;
-      case NONE: color = GRAY; break;
-    }
-    DrawRectangleV(u::topleft(pos,50,50), {50,50}, color);
-    currentAction->draw(pos, inverse);
-  } else {
-    currentAnimation->draw(pos, inverse);
-  }
+  // if(currentAction){
+  //   DrawText(std::to_string(static_cast<Move*>(currentAction)->currentFrame).c_str(), 50,400, 30, DARKGRAY);
+  //   DrawText(std::to_string(static_cast<Move*>(currentAction)->counter).c_str(), 50,450, 30, DARKGRAY);
+  //   FrameState state = static_cast<Move*>(currentAction)->getFrame().state;
+  //   Color color;
+  //   switch(state) {
+  //     case STARTUP: color = YELLOW; break;
+  //     case ACTIVE: color = RED; break;
+  //     case RECOVERY: color = BLUE; break;
+  //     case NONE: color = GRAY; break;
+  //   }
+  //   DrawRectangleV(u::topleft(pos,50,50), {50,50}, color);
+  //   currentAction->draw(pos, inverse);
+  // } else {
+  //   currentAnimation->draw(pos, inverse);
+  // }
+  DrawRectangleV(u::topleft(pos,size.x,size.y), size, GREEN);
+  currentAnimation->draw(pos, inverse);
+  state->draw(this);
 }
 
-bool Player::setAnimation(std::string anim_key){
+void Player::setAnimation(std::string anim_key){
   if(anim.find(anim_key) == anim.end())
-    return false;
+    throw "Animation key does not exist";
 
   currentAnimation = anim[anim_key];
-  return true;
 }
 
 Player::~Player() {

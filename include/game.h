@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 class Player;
-class InputHandler;
+class InputReader;
 class Spritesheet;
 
 class Game{
@@ -13,11 +13,11 @@ class Game{
   const int screenHeight;
   int player1Score;
   int player2Score;
+  InputReader* r1;
+  InputReader* r2;
+  InputReader* r3;
   Player* p1;
   Player* p2;
-  InputHandler* h1;
-  InputHandler* h2;
-  InputHandler* h3;
   Vector2 playerSize = {50, 250};
   int groundPosition;
 
@@ -27,9 +27,7 @@ class Game{
 
     Game(int width, int height);
     ~Game();
-    void loadAssets();
     void draw();
-    void handleInput();
     void update();
     void reset();
     int getWidth();

@@ -1,6 +1,6 @@
 #include "spritesheet.h"
 #include "raylib.h"
-#include "util.cc"
+#include "util.h"
 #include <cmath>
 
 Spritesheet::Spritesheet(Texture2D sheet, Vector2 dimensions)

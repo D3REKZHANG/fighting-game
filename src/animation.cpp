@@ -1,6 +1,6 @@
 #include "animation.h"
 #include "spritesheet.h"
-#include "util.cc"
+#include "util.h"
 
 Animation::Animation(Spritesheet* spritesheet, int start, int stop, int tickSpeed, bool repeat)
   : spritesheet{spritesheet}, range{start, stop}, tickSpeed{tickSpeed}, repeat{repeat} {}

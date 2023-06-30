@@ -84,7 +84,7 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
 endif
 # Define include paths for required headers
 # NOTE: Several external required libraries (stb and others)
-INCLUDE_PATHS = -Ilib -Ilib/external -Iinclude
+INCLUDE_PATHS = -Ilib -Ilib/external -Iinclude -Iinclude/states
 
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
 		LDLIBS = -Llib
@@ -145,9 +145,7 @@ endif
 #SRC = $(call rwildcard, *.c, *.cpp, *.h)
 #OBJS = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-SRC_DIR = src
-
-COMPILE = g++ ${SRC_DIR}/*.cpp -o game.exe $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+COMPILE = g++ src/*.cpp src/states/*.cpp -o game $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
 RUN_DEBUG = gdb game -ex 'run'
 
 # Default target entry
@@ -169,6 +167,6 @@ start:
 
 # Clean everything
 clean:
-	del *.o *.exe /s
+	del *.o game* /s
 	@echo Cleaning done
 

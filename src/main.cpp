@@ -13,14 +13,12 @@ int main()
   const int screenWidth = 800;
   const int screenHeight = 450;
   
-  game = new Game(screenWidth, screenHeight);
-  game->reset();
-
   InitWindow(screenWidth, screenHeight, "Fighting Game");
 
-  game->loadAssets();
-
   SetTargetFPS(60);
+
+  game = new Game(screenWidth, screenHeight);
+  game->reset();
 
   while (!WindowShouldClose())
   {
