@@ -7,7 +7,7 @@
 #include <string>
 
 Game::Game(int width, int height):screenWidth{width},screenHeight{height}{
-  tx["motions"] = LoadTexture("../assets/motions.png");       
+  tx["motions"] = LoadTexture("assets/motions.png");       
 
   groundPosition = screenHeight - 50;
   r1 = new InputReader(this, p1, ControlSet{KEYBOARD, -1, KEY_A, KEY_D, KEY_W, KEY_S, KEY_J});

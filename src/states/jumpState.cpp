@@ -1,42 +1,38 @@
 #include "state.h"
 #include "player.h"
 #include "game.h"
+#include "raymath.h"
 
-void JumpState::init() {}
+JumpState::JumpState(Player* p): State(p) {}
+
+std::string JumpState::getName() { return "JUMP"; }
+
+void JumpState::init() {
+  player->vel.y = -30;
+  player->vel.x = 0;
+}
 void JumpState::exiting() {}
 
-State* JumpState::handleInput(Player* player, Input input) {
-  int motion = input.motion;
-  if(motion == 4 || motion == 6){
-    if(motion == 4) player->vel.x = -player->speed;
-    if(motion == 6) player->vel.x = player->speed;
-  }
-  if(motion == 5){
-    player->vel.x = 0;
-    player->setAnimation("idle");
-  }
-  if(motion == 7 || motion == 8 || motion == 9){
-    player->vel.y = -30;
-    player->vel.x = 0;
-    if(motion == 7)
-      player->vel.x = -player->speed;
-    if(motion == 9)
-      player->vel.x = player->speed;
-  }
-   return nullptr;
+State* JumpState::handleInput(Input input) {
+  return nullptr;
 }
 
-void JumpState::update(Player* player) {
+State* JumpState::update() {
   if (player->pos.y >= player->game->getGroundPos()-player->size.y/2) {
     player->pos.y = player->game->getGroundPos()-player->size.y/2;
     player->accel.y = 0;
     player->vel = {0, 0};
-    player->state = new ControlState();
+    player->currentState = new ControlState(player);
   } else {
     player->accel.y = 3; // gravity
   }
+
+  player->vel = Vector2Add(player->vel, player->accel);
+  player->pos = Vector2Add(player->pos, player->vel);
+
+  return nullptr;
 };
 
-void JumpState::draw(Player* player) {};
+void JumpState::draw() {};
 
 JumpState::~JumpState() {}

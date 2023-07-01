@@ -147,9 +147,14 @@ endif
 
 COMPILE = g++ src/*.cpp src/states/*.cpp -o game $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
 RUN_DEBUG = gdb game -ex 'run'
+RUN = ./game
 
 # Default target entry
 all:
+	${COMPILE}
+	${RUN}
+
+debug:
 	${COMPILE}
 	${RUN_DEBUG}
 

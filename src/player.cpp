@@ -4,8 +4,9 @@
 #include "game.h"
 #include "spritesheet.h"
 #include "animation.h"
-#include "move.h"
+#include "moveState.h"
 #include "util.h"
+#include <typeinfo>
 
 Player::Player(Color c, Vector2 size, Game* game, InputReader* inputReader, bool inverse)
   : colour{c},vel{0,0},size{size},game{game}, inverse{inverse}, inputReader{inputReader}
@@ -21,7 +22,7 @@ Player::Player(Color c, Vector2 size, Game* game, InputReader* inputReader, bool
   anim["special"] = new Animation(ss["main"], {5,14}, {4, 16}, 8);
   anim["thrust"] = new Animation(ss["celsius"], 2, 6, 0);
 
-  move["thrust"] = new Move(anim["thrust"], {
+  move["thrust"] = new MoveState(this, anim["thrust"], {
     {STARTUP, {2, 0}, 4},
     {ACTIVE, {4, 0}, 4},
     {ACTIVE, {0, 0}, 4},
@@ -30,13 +31,24 @@ Player::Player(Color c, Vector2 size, Game* game, InputReader* inputReader, bool
   });
 
   setAnimation("idle");
-  state = new ControlState();
+  currentState = new ControlState(this);
 }
 
 void Player::update(){
-  Input input = inputReader->read();
-  state->handleInput(this, inputReader->read());
-  state->update(this);
+  State* newState = currentState->handleInput(inputReader->read());
+  if(newState != nullptr){
+    currentState->exiting();
+    if(currentState->getName() != "MOVE") delete currentState;
+    currentState = newState;
+    newState->init();
+  }
+  State* newState2 = currentState->update();
+  if(newState2 != nullptr){
+    currentState->exiting();
+    if(currentState->getName() != "MOVE") delete currentState;
+    currentState = newState2;
+    newState2->init();
+  }
   /* if(currentAction) {
     if(currentAction->update()){
       currentAction = nullptr;
@@ -52,15 +64,6 @@ void Player::update(){
 void Player::fireball(){
   currentAnimation = anim["special"];
   currentAnimation->play();
-}
-
-void Player::thrust(){
-  // if(!currentAction){
-  //   currentAction = move["thrust"];
-  //   move["thrust"]->reset();
-  //   state = ATTACKING;
-  //   vel.x = 0;
-  // }
 }
 
 void Player::draw(){
@@ -84,8 +87,8 @@ void Player::draw(){
   //   currentAnimation->draw(pos, inverse);
   // }
   DrawRectangleV(u::topleft(pos,size.x,size.y), size, GREEN);
-  currentAnimation->draw(pos, inverse);
-  state->draw(this);
+  currentState->draw();
+  DrawText(currentState->getName().c_str(), 10, 70, 20, DARKGRAY);
 }
 
 void Player::setAnimation(std::string anim_key){

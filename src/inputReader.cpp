@@ -31,9 +31,10 @@ Input InputReader::read(){
   if(isDown(controls.a)) button = LIGHT;
   else button = NONE;
 
-  // if different, add to queue
-  if(inputQueue.size() == 0 || motion != inputQueue.back().motion)
-    inputQueue.push_back({motion, button, GetTime()});
+  Input input = { motion, button, GetTime() };
+  if(inputQueue.size() == 0 || input != inputQueue.back()) {
+    inputQueue.push_back(input);
+  }
 
   // clear old inputs
   double currentTime = GetTime();
@@ -57,12 +58,14 @@ Input InputReader::read(){
 
 void InputReader::drawQueue(){
   float drawn = 0;
-  for(size_t i=std::max(static_cast<int>(inputQueue.size())-10, 0);i<inputQueue.size();i++){
+  for(size_t i=std::max(static_cast<int>(inputQueue.size())-6, 0);i<inputQueue.size();i++){
     int motion = inputQueue[i].motion;
-    if(motion != 5){
+    if(inputQueue[i].button != NONE || motion != 5){
       float r = floor(2-(motion-1)/3);
       float c = (motion-1)%3;
-      DrawTextureRec(game->tx["motions"], Rectangle{c*50,r*50,50,50}, Vector2{10+50*drawn, 75}, RED);
+      DrawTextureRec(game->tx["motions"], Rectangle{c*50,r*50,50,50}, Vector2{10, 340-50*drawn}, RED);
+      if(inputQueue[i].button != NONE) 
+        DrawRectangle(10+50+10,350-50*drawn,30,30,RED);
       drawn++;
     }
   }

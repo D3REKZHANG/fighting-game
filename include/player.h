@@ -4,7 +4,7 @@
 #include "inputReader.h"
 #include "raylib.h"
 #include "animation.h"
-#include "move.h"
+#include "moveState.h"
 #include "state.h"
 #include <string>
 #include <unordered_map>
@@ -26,9 +26,9 @@ class Player {
     std::unordered_map<std::string, Texture2D> tx;
     std::unordered_map<std::string, Spritesheet*> ss;
     std::unordered_map<std::string, Animation*> anim;
-    std::unordered_map<std::string, Move*> move;
+    std::unordered_map<std::string, MoveState*> move;
     Animation* currentAnimation = nullptr;
-    State* state = nullptr;
+    State* currentState = nullptr;
     InputReader* inputReader;
     
     Player(Color c, Vector2 size, Game* game, InputReader* inputReader, bool inverse);

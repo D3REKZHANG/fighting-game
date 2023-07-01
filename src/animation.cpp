@@ -3,7 +3,7 @@
 #include "util.h"
 
 Animation::Animation(Spritesheet* spritesheet, int start, int stop, int tickSpeed, bool repeat)
-  : spritesheet{spritesheet}, range{start, stop}, tickSpeed{tickSpeed}, repeat{repeat} {}
+  : range{start, stop}, spritesheet{spritesheet}, tickSpeed{tickSpeed}, repeat{repeat} {}
 
 Animation::Animation(Spritesheet* spritesheet, Vector2 start, Vector2 stop, int tickSpeed, bool repeat)
   : spritesheet{spritesheet}, tickSpeed{tickSpeed}, repeat{repeat} {

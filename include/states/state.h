@@ -2,6 +2,7 @@
 #define STATE_H
 
 #include "raylib.h"
+#include <string>
 
 class Player;
 class Game;
@@ -9,22 +10,30 @@ struct Input;
 
 class State { 
 public:
+  Player* player;
+  State(Player* player);
   virtual void init() = 0;
-  virtual State* handleInput(Player* player, Input input) = 0;
-  virtual void update(Player* player) = 0;
-  virtual void draw(Player* player) = 0;
+  virtual State* handleInput(Input input) = 0;
+  virtual State* update() = 0;
+  virtual void draw() = 0;
   virtual void exiting() = 0;
+  virtual std::string getName() = 0;
+  virtual ~State() = 0;
 };
+
+inline State::~State() {}
+inline State::State(Player* player) : player{player} {}
 
 #define METHODS \
 public: \
+  virtual std::string getName(); \
   virtual void init(); \
-  virtual State* handleInput(Player* player, Input input); \
-  virtual void update(Player* player); \
-  virtual void draw(Player* player); \
+  virtual State* handleInput(Input input); \
+  virtual State* update(); \
+  virtual void draw(); \
   virtual void exiting();
 
-class ControlState : public State { METHODS ControlState(); virtual ~ControlState(); };
-class JumpState : public State { METHODS virtual ~JumpState(); };
+class ControlState : public State { METHODS ControlState(Player* p); ~ControlState(); };
+class JumpState : public State { METHODS JumpState(Player* p); ~JumpState(); };
 
 #endif

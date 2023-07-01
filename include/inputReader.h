@@ -15,6 +15,10 @@ struct Input {
   int motion;
   Button button;
   double time;
+  
+  bool operator!=(Input right) {
+    return motion != right.motion || button != right.button;
+  }
 };
 
 enum ControllerType { KEYBOARD, CONTROLLER };
