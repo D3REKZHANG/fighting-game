@@ -6,8 +6,14 @@
 #include "util.h"
 #include <string>
 
+using u::assets;
+
 Game::Game(int width, int height):screenWidth{width},screenHeight{height}{
-  tx["motions"] = LoadTexture("assets/motions.png");       
+  assets()->tx["motions"] = LoadTexture("assets/motions.png");       
+  assets()->tx["spritesheet"] = LoadTexture("assets/adventurer_sprite.png");
+  assets()->tx["cel_spritesheet"] = LoadTexture("assets/celsius_thrust.png");
+  assets()->ss["main"] = new Spritesheet(assets()->tx["spritesheet"], {50, 37});
+  assets()->ss["celsius"] = new Spritesheet(assets()->tx["cel_spritesheet"], {500, 250});
 
   groundPosition = screenHeight - 50;
   r1 = new InputReader(this, p1, ControlSet{KEYBOARD, -1, KEY_A, KEY_D, KEY_W, KEY_S, KEY_J});

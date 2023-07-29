@@ -6,21 +6,19 @@
 #include "animation.h"
 #include "moveState.h"
 #include "util.h"
+#include "assetManager.h"
 #include <typeinfo>
+
+using u::assets; 
 
 Player::Player(Color c, Vector2 size, Game* game, InputReader* inputReader, bool inverse)
   : colour{c},vel{0,0},size{size},game{game}, inverse{inverse}, inputReader{inputReader}
 {
-  tx["spritesheet"] = LoadTexture("assets/adventurer_sprite.png");
-  tx["cel_spritesheet"] = LoadTexture("assets/celsius_thrust.png");
-  ss["main"] = new Spritesheet(tx["spritesheet"], {50, 37});
-  ss["celsius"] = new Spritesheet(tx["cel_spritesheet"], {500, 250});
-
   //anim["idle"] = new Animation(ss["main"], 39, 42, 8, true);
-  anim["idle"] = new Animation(ss["celsius"], 1, 1, 8, true);
-  anim["swing"] = new Animation(ss["main"], 43, 59, 5);
-  anim["special"] = new Animation(ss["main"], {5,14}, {4, 16}, 8);
-  anim["thrust"] = new Animation(ss["celsius"], 2, 6, 0);
+  anim["idle"] = new Animation(assets()->ss["celsius"], 1, 1, 8, true);
+  anim["swing"] = new Animation(assets()->ss["main"], 43, 59, 5);
+  anim["special"] = new Animation(assets()->ss["main"], {5,14}, {4, 16}, 8);
+  anim["thrust"] = new Animation(assets()->ss["celsius"], 2, 6, 0);
 
   move["thrust"] = new MoveState(this, anim["thrust"], {
     {STARTUP, {2, 0}, 4},
@@ -98,9 +96,6 @@ void Player::setAnimation(std::string anim_key){
 }
 
 Player::~Player() {
-  for(auto s : ss){
-    delete s.second;
-  }
   for(auto a : anim){
     delete a.second;
   }
