@@ -22,6 +22,7 @@ void Game::draw(){
   p1->draw();
   p2->draw();
   r1->drawQueue();
+  DrawText(p1->currentState->getName().c_str(), 10, 70, 20, DARKGRAY);
 }
 
 void Game::update(){

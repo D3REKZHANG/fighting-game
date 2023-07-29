@@ -88,7 +88,6 @@ void Player::draw(){
   // }
   DrawRectangleV(u::topleft(pos,size.x,size.y), size, GREEN);
   currentState->draw();
-  DrawText(currentState->getName().c_str(), 10, 70, 20, DARKGRAY);
 }
 
 void Player::setAnimation(std::string anim_key){
