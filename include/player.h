@@ -23,8 +23,6 @@ class Player {
     Game* game;
     bool inverse;
     float speed = 5;
-    std::unordered_map<std::string, Texture2D> tx;
-    std::unordered_map<std::string, Spritesheet*> ss;
     std::unordered_map<std::string, Animation*> anim;
     std::unordered_map<std::string, MoveState*> move;
     Animation* currentAnimation = nullptr;

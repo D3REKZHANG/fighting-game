@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <cmath>
 
+using u::assets;
+
 InputReader::InputReader(Game* game, Player* player, ControlSet controls):game{game},player{player},controls{controls}{}
 
 bool InputReader::isDown(int key) {
@@ -63,7 +65,7 @@ void InputReader::drawQueue(){
     if(inputQueue[i].button != NONE || motion != 5){
       float r = floor(2-(motion-1)/3);
       float c = (motion-1)%3;
-      DrawTextureRec(game->tx["motions"], Rectangle{c*50,r*50,50,50}, Vector2{10, 340-50*drawn}, RED);
+      DrawTextureRec(assets()->tx["motions"], Rectangle{c*50,r*50,50,50}, Vector2{10, 340-50*drawn}, RED);
       if(inputQueue[i].button != NONE) 
         DrawRectangle(10+50+10,350-50*drawn,30,30,RED);
       drawn++;

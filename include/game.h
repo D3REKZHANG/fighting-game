@@ -22,9 +22,6 @@ class Game{
   int groundPosition;
 
   public:
-    std::unordered_map<std::string, Texture2D> tx;
-    std::unordered_map<std::string, Spritesheet*> ss;
-
     Game(int width, int height);
     ~Game();
     void draw();

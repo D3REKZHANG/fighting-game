@@ -4,10 +4,10 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "assetManager.h"
 #include "raylib.h"
 
-class u {
-public:
+namespace u {
   static void log(std::string s) {
     std::cout << s << std::endl;
   }
@@ -26,6 +26,10 @@ public:
 
   static Vector2 negate(Vector2 vec) {
     return {-vec.x, -vec.y};
+  }
+
+  static AssetManager* assets() {
+    return AssetManager::getInstance();
   }
 };
 
