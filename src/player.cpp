@@ -33,30 +33,22 @@ Player::Player(Color c, Vector2 size, Game* game, InputReader* inputReader, bool
 }
 
 void Player::update(){
-  State* newState = currentState->handleInput(inputReader->read());
-  if(newState != nullptr){
+  State* newState;
+
+  newState = currentState->handleInput(inputReader->read());
+  handleStateChange(newState);
+
+  newState = currentState->update();
+  handleStateChange(newState);
+}
+
+void Player::handleStateChange(State* state) {
+  if(state != nullptr){
     currentState->exiting();
     if(currentState->getName() != "MOVE") delete currentState;
-    currentState = newState;
-    newState->init();
+    currentState = state;
+    state->init();
   }
-  State* newState2 = currentState->update();
-  if(newState2 != nullptr){
-    currentState->exiting();
-    if(currentState->getName() != "MOVE") delete currentState;
-    currentState = newState2;
-    newState2->init();
-  }
-  /* if(currentAction) {
-    if(currentAction->update()){
-      currentAction = nullptr;
-      state = IDLE;
-      vel = {0,0};
-    }else{
-      vel = static_cast<Move*>(currentAction)->getFrame().vel;
-      if(inverse) vel = u::negate(vel);
-    }
-  }  */
 }
 
 void Player::fireball(){
@@ -84,8 +76,11 @@ void Player::draw(){
   // } else {
   //   currentAnimation->draw(pos, inverse);
   // }
-  DrawRectangleV(u::topleft(pos,size.x,size.y), size, GREEN);
   currentState->draw();
+
+  // Collision Boxes
+  Vector2 vec = u::topleft(pos,size.x,size.y);
+  DrawRectangleLines(vec.x, vec.y, size.x, size.y, GREEN);
 }
 
 void Player::setAnimation(std::string anim_key){

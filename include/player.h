@@ -36,6 +36,7 @@ class Player {
     void fireball();
     void thrust();
     void setAnimation(std::string anim_key);
+    void handleStateChange(State* state);
 };
 
 #endif

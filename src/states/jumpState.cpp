@@ -10,7 +10,6 @@ std::string JumpState::getName() { return "JUMP"; }
 void JumpState::init() {
   player->vel.y = -30;
   player->pos.y -= 1;
-  player->vel.x = 0;
 
   player->setAnimation("idle");
   player->currentAnimation->play();

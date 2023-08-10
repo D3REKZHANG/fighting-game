@@ -162,7 +162,7 @@ build:
 	${COMPILE}
 
 start:
-	${RUN_DEBUG}
+	${RUN}
 
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)
