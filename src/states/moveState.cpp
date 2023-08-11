@@ -12,7 +12,7 @@ std::string MoveState::getName() { return "MOVE"; }
 
 void MoveState::init() {
   counter = 0;
-  currentFrame = 0;
+  currentFrameNum = 0;
   animation->play();
 }
 
@@ -40,16 +40,16 @@ State* MoveState::update(){
   player->vel = Vector2Add(player->vel, player->accel);
   player->pos = Vector2Add(player->pos, player->vel);
 
-  if(counter != frameData[currentFrame].frameCount) {
+  if(counter != frameData[currentFrameNum].frameCount) {
     counter++;
     return nullptr;
   }
 
-  if(currentFrame+1 == frameData.size()){
+  if(currentFrameNum+1 == frameData.size()){
     return new ControlState(player);
   }
 
-  currentFrame++;
+  currentFrameNum++;
   animation->currentFrame++;
   counter = 0;
 
@@ -59,8 +59,17 @@ State* MoveState::update(){
 void MoveState::draw(){
   animation->draw(player->pos, player->inverse);
 
+  Player::Box hitbox = frameData[currentFrameNum].hitbox;
+  if(hitbox.relativeBounds.x != -1) {
+    DrawRectangleLinesEx(hitbox.getTranslated(player), 1, RED);
+  }
+
+  for(Player::Box hurtbox : getHurtbox()) {
+    DrawRectangleLinesEx(hurtbox.getTranslated(player), 1, GREEN);
+  }
+
   // Draw Frame Data
-  DrawText(std::to_string(currentFrame).c_str(), 300,50, 30, DARKGRAY);
+  DrawText(std::to_string(currentFrameNum).c_str(), 300,50, 30, DARKGRAY);
   int frames = 0;
   for(int f=0;f<frameData.size();f++) {
     Color color;
@@ -74,7 +83,7 @@ void MoveState::draw(){
       int width = 15;
       DrawRectangleLines(349+frames*(width+5),99,width+2,width+2,DARKGRAY);
 
-      if((f==currentFrame && counter >= i) || f < currentFrame) {
+      if((f==currentFrameNum && counter >= i) || f < currentFrameNum) {
         DrawRectangle(350+frames*(width+5),100,width,width,color);
       }
       frames++;
@@ -82,12 +91,16 @@ void MoveState::draw(){
   }
 }
 
+std::vector<Player::Box> MoveState::getHurtbox() {
+  return frameData[currentFrameNum].hurtbox;
+}
+
 Frame MoveState::getFrame(){
-  return frameData[currentFrame];
+  return frameData[currentFrameNum];
 }
 
 void MoveState::reset() {
-  currentFrame = 0;
+  currentFrameNum = 0;
   counter = 0;
   animation->currentFrame = 0;
 }

@@ -40,6 +40,14 @@ State* JumpState::update() {
 
 void JumpState::draw() {
   player->currentAnimation->draw(player->pos, player->inverse);
+
+  for(Player::Box hurtbox : getHurtbox()) {
+    DrawRectangleLinesEx(hurtbox.getTranslated(player), 1, GREEN);
+  }
 };
+
+std::vector<Player::Box> JumpState::getHurtbox() {
+  return {{-player->size.x/2-20,-player->size.y/2, player->size.x+40, player->size.y}};
+}
 
 JumpState::~JumpState() {}

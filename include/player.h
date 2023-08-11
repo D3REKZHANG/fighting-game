@@ -4,14 +4,14 @@
 #include "inputReader.h"
 #include "raylib.h"
 #include "animation.h"
-#include "moveState.h"
-#include "state.h"
 #include <string>
 #include <unordered_map>
 
 class Game;
 class Animation;
 class Spritesheet;
+class MoveState;
+class State;
 
 class Player {
   public:
@@ -37,6 +37,17 @@ class Player {
     void thrust();
     void setAnimation(std::string anim_key);
     void handleStateChange(State* state);
+
+    class Box {
+    public:
+      Rectangle relativeBounds;
+
+      Box();
+      Box(Rectangle rec);
+      Box(float x, float y, float w, float h);
+
+      Rectangle getTranslated(Player* p);
+    };
 };
 
 #endif

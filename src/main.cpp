@@ -15,13 +15,20 @@ int main()
   
   InitWindow(screenWidth, screenHeight, "Fighting Game");
 
-  SetTargetFPS(60);
+  SetTargetFPS(80);
+
+  bool slowed = false;
 
   game = new Game(screenWidth, screenHeight);
   game->reset();
 
   while (!WindowShouldClose())
   {
+    if(IsKeyPressed(KEY_P)) {
+      SetTargetFPS(slowed ? 80 : 10);
+      slowed = !slowed;
+    }
+
     game->update();
     draw();
   }

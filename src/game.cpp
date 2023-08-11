@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "spritesheet.h"
 #include "util.h"
+#include "state.h"
 #include <string>
 
 using u::assets;
@@ -16,7 +17,7 @@ Game::Game(int width, int height):screenWidth{width},screenHeight{height}{
   assets()->ss["celsius"] = new Spritesheet(assets()->tx["cel_spritesheet"], {500, 250});
 
   groundPosition = screenHeight - 50;
-  r1 = new InputReader(this, p1, ControlSet{KEYBOARD, -1, KEY_A, KEY_D, KEY_W, KEY_S, KEY_J});
+  r1 = new InputReader(this, p1, ControlSet{KEYBOARD, -1, KEY_A, KEY_D, KEY_SPACE, KEY_S, KEY_J});
   r2 = new InputReader(this, p2, ControlSet{KEYBOARD, -1, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_L});
   r3 = new InputReader(this, p1, ControlSet{CONTROLLER, 0, 4, 2, 1, 3, 5});
   p1 = new Player(RED, playerSize, this, r1, false);

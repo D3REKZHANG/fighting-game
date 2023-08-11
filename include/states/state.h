@@ -2,9 +2,10 @@
 #define STATE_H
 
 #include "raylib.h"
+#include "player.h"
 #include <string>
+#include <vector>
 
-class Player;
 class Game;
 struct Input;
 
@@ -18,6 +19,7 @@ public:
   virtual void draw() = 0;
   virtual void exiting() = 0;
   virtual std::string getName() = 0;
+  virtual std::vector<Player::Box> getHurtbox() = 0;
   virtual ~State() = 0;
 };
 
@@ -31,7 +33,8 @@ public: \
   virtual State* handleInput(Input input); \
   virtual State* update(); \
   virtual void draw(); \
-  virtual void exiting();
+  virtual void exiting(); \
+  virtual std::vector<Player::Box> getHurtbox();
 
 class ControlState : public State { METHODS ControlState(Player* p); ~ControlState(); };
 class JumpState : public State { METHODS JumpState(Player* p); ~JumpState(); };

@@ -2,6 +2,7 @@
 #include "player.h"
 #include "raymath.h"
 #include "util.h"
+#include "moveState.h"
 
 ControlState::ControlState(Player* player) : State(player) {}
 
@@ -49,6 +50,14 @@ State* ControlState::update(){
 
 void ControlState::draw(){
   player->currentAnimation->draw(player->pos, player->inverse);
+
+  for(Player::Box hurtbox : getHurtbox()) {
+    DrawRectangleLinesEx(hurtbox.getTranslated(player), 1, GREEN);
+  }
+}
+
+std::vector<Player::Box> ControlState::getHurtbox() {
+  return {{-player->size.x/2-20,-player->size.y/2, player->size.x+40, player->size.y}};
 }
 
 ControlState::~ControlState() {}
