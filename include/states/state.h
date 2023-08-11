@@ -39,4 +39,13 @@ public: \
 class ControlState : public State { METHODS ControlState(Player* p); ~ControlState(); };
 class JumpState : public State { METHODS JumpState(Player* p); ~JumpState(); };
 
+class HurtState : public State {
+  METHODS
+  int counter;
+  int frames;
+  Vector2 forceVel;
+  HurtState(Player* p, int frames, Vector2 forceVel);
+  ~HurtState();
+};
+
 #endif

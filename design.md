@@ -9,6 +9,7 @@
 - Responsible for all game logic
 - calling update, draw
 - handles game screens
+- handles collisions?
 
 ## Player
 - stores player data

@@ -59,8 +59,7 @@ State* MoveState::update(){
 void MoveState::draw(){
   animation->draw(player->pos, player->inverse);
 
-  Player::Box hitbox = frameData[currentFrameNum].hitbox;
-  if(hitbox.relativeBounds.x != -1) {
+  for(Player::Box hitbox : getHitbox()) {
     DrawRectangleLinesEx(hitbox.getTranslated(player), 1, RED);
   }
 
@@ -91,8 +90,17 @@ void MoveState::draw(){
   }
 }
 
+void MoveState::handleHit(Player* playerHit) {
+  Vector2 forceVel = {static_cast<float>((playerHit->inverse) ? 10 : -10), 0};
+  playerHit->handleStateChange(new HurtState(playerHit, 20, forceVel));
+}
+
 std::vector<Player::Box> MoveState::getHurtbox() {
   return frameData[currentFrameNum].hurtbox;
+}
+
+std::vector<Player::Box> MoveState::getHitbox() {
+  return frameData[currentFrameNum].hitbox;
 }
 
 Frame MoveState::getFrame(){

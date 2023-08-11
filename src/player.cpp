@@ -19,12 +19,13 @@ Player::Player(Color c, Vector2 size, Game* game, InputReader* inputReader, bool
   anim["swing"] = new Animation(assets()->ss["main"], 43, 59, 5);
   anim["special"] = new Animation(assets()->ss["main"], {5,14}, {4, 16}, 8);
   anim["thrust"] = new Animation(assets()->ss["celsius"], 2, 6, 0);
+  anim["hurt"] = new Animation(assets()->ss["celsius_hurt"], 1, 1, 8, true);
 
   Player::Box defaultHurtbox = Player::Box{-size.x/2-20,-size.y/2, size.x+40, size.y};
   move["thrust"] = new MoveState(this, anim["thrust"], {
     {STARTUP, {2, 0}, 4, {}, {defaultHurtbox}},
-    {ACTIVE, {4, 0}, 4, {30,-10,200,20}, {defaultHurtbox, {30,-20,100,40}}},
-    {ACTIVE, {0, 0}, 4, {30,-10,300,20}, {defaultHurtbox, {30,-20,100,40}}},
+    {ACTIVE, {4, 0}, 4, {{30,-10,200,20}}, {defaultHurtbox, {30,-20,100,40}}},
+    {ACTIVE, {0, 0}, 4, {{30,-10,220,20}}, {defaultHurtbox, {30,-20,100,40}}},
     {RECOVERY, {-4, 0}, 4, {}, {defaultHurtbox, {30,-20,100,40}}},
     {RECOVERY, {-2, 0}, 4, {}, {defaultHurtbox}},
   });
@@ -58,28 +59,9 @@ void Player::fireball(){
 }
 
 void Player::draw(){
-  // collide box
-  // DrawRectangleV(u::topleft(pos,size.x,size.y), size, GREEN);
-
-  // if(currentAction){
-  //   DrawText(std::to_string(static_cast<Move*>(currentAction)->currentFrame).c_str(), 50,400, 30, DARKGRAY);
-  //   DrawText(std::to_string(static_cast<Move*>(currentAction)->counter).c_str(), 50,450, 30, DARKGRAY);
-  //   FrameState state = static_cast<Move*>(currentAction)->getFrame().state;
-  //   Color color;
-  //   switch(state) {
-  //     case STARTUP: color = YELLOW; break;
-  //     case ACTIVE: color = RED; break;
-  //     case RECOVERY: color = BLUE; break;
-  //     case NONE: color = GRAY; break;
-  //   }
-  //   DrawRectangleV(u::topleft(pos,50,50), {50,50}, color);
-  //   currentAction->draw(pos, inverse);
-  // } else {
-  //   currentAnimation->draw(pos, inverse);
-  // }
   currentState->draw();
 
-  // Collision Boxes
+  // Movement Collision Boxes
   Vector2 vec = u::topleft(pos,size.x,size.y);
   DrawRectangleLines(vec.x, vec.y, size.x, size.y, BROWN);
 }

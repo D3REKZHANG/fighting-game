@@ -28,12 +28,6 @@ State* ControlState::handleInput(Input input) {
   }
   if(motion == 7 || motion == 8 || motion == 9){
     return new JumpState(player);
-    /* player->vel.y = -30;
-    player->vel.x = 0;
-    if(motion == 7)
-      player->vel.x = -player->speed;
-    if(motion == 9)
-      player->vel.x = player->speed; */
   }
 
   if(input.button == LIGHT){

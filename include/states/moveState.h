@@ -15,7 +15,7 @@ struct Frame {
   Vector2 vel;
   int frameCount;
   // boxes relative to character
-  Player::Box hitbox;
+  std::vector<Player::Box> hitbox;
   std::vector<Player::Box> hurtbox;
 };
 
@@ -36,8 +36,9 @@ public:
   virtual std::string getName();
   virtual ~MoveState() = default;
   Frame getFrame();
-  Player::Box getHitbox();
+  std::vector<Player::Box> getHitbox();
   std::vector<Player::Box> getHurtbox();
+  void handleHit(Player* playerHit);
   void reset();
 };
 
