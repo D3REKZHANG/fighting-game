@@ -7,30 +7,11 @@
 #include "moveState.h"
 #include "util.h"
 #include "assetManager.h"
-#include <typeinfo>
+#include <cassert>
 
-using u::assets; 
-
-Player::Player(Color c, Vector2 size, Game* game, InputReader* inputReader, bool inverse)
-  : colour{c},vel{0,0},size{size},game{game}, inverse{inverse}, inputReader{inputReader}
+Player::Player(Game* game, InputReader* inputReader)
+  : game{game}, inputReader{inputReader}
 {
-  //anim["idle"] = new Animation(ss["main"], 39, 42, 8, true);
-  anim["idle"] = new Animation(assets()->ss["celsius"], 1, 1, 8, true);
-  anim["swing"] = new Animation(assets()->ss["main"], 43, 59, 5);
-  anim["special"] = new Animation(assets()->ss["main"], {5,14}, {4, 16}, 8);
-  anim["thrust"] = new Animation(assets()->ss["celsius"], 2, 6, 0);
-  anim["hurt"] = new Animation(assets()->ss["celsius_hurt"], 1, 1, 8, true);
-
-  Player::Box defaultHurtbox = Player::Box{-size.x/2-20,-size.y/2, size.x+40, size.y};
-  move["thrust"] = new MoveState(this, anim["thrust"], {
-    {STARTUP, {2, 0}, 4, {}, {defaultHurtbox}},
-    {ACTIVE, {4, 0}, 4, {{30,-10,200,20}}, {defaultHurtbox, {30,-20,100,40}}},
-    {ACTIVE, {0, 0}, 4, {{30,-10,220,20}}, {defaultHurtbox, {30,-20,100,40}}},
-    {RECOVERY, {-4, 0}, 4, {}, {defaultHurtbox, {30,-20,100,40}}},
-    {RECOVERY, {-2, 0}, 4, {}, {defaultHurtbox}},
-  });
-
-  setAnimation("idle");
   currentState = new ControlState(this);
 }
 
@@ -67,8 +48,7 @@ void Player::draw(){
 }
 
 void Player::setAnimation(std::string anim_key){
-  if(anim.find(anim_key) == anim.end())
-    throw "Animation key does not exist";
+  assert(anim.find(anim_key) != anim.end());
 
   currentAnimation = anim[anim_key];
 }

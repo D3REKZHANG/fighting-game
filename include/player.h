@@ -13,23 +13,27 @@ class Spritesheet;
 class MoveState;
 class State;
 
+struct CharacterStats {
+  float walk_speed;
+  int max_health;
+};
+
 class Player {
   public:
-    Color colour;
     Vector2 pos = {0,0};
     Vector2 vel = {0,0};
     Vector2 accel = {0,0};
     Vector2 size;
     Game* game;
-    bool inverse;
-    float speed = 5;
+    bool inverse = false;
+    CharacterStats stats = {5, 20};
     std::unordered_map<std::string, Animation*> anim;
     std::unordered_map<std::string, MoveState*> move;
     Animation* currentAnimation = nullptr;
     State* currentState = nullptr;
     InputReader* inputReader;
     
-    Player(Color c, Vector2 size, Game* game, InputReader* inputReader, bool inverse);
+    Player(Game* game, InputReader* inputReader);
     ~Player();
     void update();
     void draw();
@@ -48,6 +52,16 @@ class Player {
 
       Rectangle getTranslated(Player* p);
     };
+};
+
+class Celsius : public Player { 
+public:
+  Celsius(Game* game, InputReader* inputReader);
+};
+
+class Naruto : public Player { 
+public:
+  Naruto(Game* game, InputReader* inputReader);
 };
 
 #endif

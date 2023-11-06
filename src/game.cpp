@@ -11,20 +11,15 @@
 using u::assets;
 
 Game::Game(int width, int height):screenWidth{width},screenHeight{height}{
-  assets()->tx["motions"] = LoadTexture("assets/motions.png");       
-  assets()->tx["spritesheet"] = LoadTexture("assets/adventurer_sprite.png");
-  assets()->tx["cel_spritesheet"] = LoadTexture("assets/celsius_thrust.png");
-  assets()->tx["cel_hurt"] = LoadTexture("assets/celsius_hurt.png");
-  assets()->ss["main"] = new Spritesheet(assets()->tx["spritesheet"], {50, 37});
-  assets()->ss["celsius"] = new Spritesheet(assets()->tx["cel_spritesheet"], {500, 250});
-  assets()->ss["celsius_hurt"] = new Spritesheet(assets()->tx["cel_hurt"], {500, 250});
+  // initialize asset manager
+  assets();
 
   groundPosition = screenHeight - 50;
   r1 = new InputReader(this, p1, ControlSet{KEYBOARD, -1, KEY_A, KEY_D, KEY_SPACE, KEY_S, KEY_J});
   r2 = new InputReader(this, p2, ControlSet{KEYBOARD, -1, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_L});
   r3 = new InputReader(this, p1, ControlSet{CONTROLLER, 0, 4, 2, 1, 3, 5});
-  p1 = new Player(RED, playerSize, this, r1, false);
-  p2 = new Player(BLUE, playerSize, this, r2, true);
+  p1 = new Celsius(this, r1);
+  p2 = new Naruto(this, r2);
 }
 
 void Game::draw(){
@@ -58,11 +53,15 @@ void Game::update(){
 
   detectHits(p1, p2);
   detectHits(p2, p1);
+
+  // detect crossover, update inverse
+  p1->inverse = p1->pos.x > p2->pos.x;
+  p2->inverse = !p1->inverse;
 }
 
 void Game::reset(){
-  p1->pos = {playerSize.x, groundPosition-playerSize.y/2};
-  p2->pos = {screenWidth - playerSize.x, groundPosition-playerSize.y/2};
+  p1->pos = {p1->size.x, groundPosition - p1->size.y/2};
+  p2->pos = {screenWidth - p1->size.x, groundPosition - p1->size.y/2};
   player1Score = 0;
   player2Score = 0;
 }

@@ -70,7 +70,7 @@ void MoveState::draw(){
   // Draw Frame Data
   DrawText(std::to_string(currentFrameNum).c_str(), 300,50, 30, DARKGRAY);
   int frames = 0;
-  for(int f=0;f<frameData.size();f++) {
+  for(size_t f=0;f<frameData.size();f++) {
     Color color;
     switch(frameData[f].state) {
       case STARTUP: color = BLUE; break;
@@ -82,7 +82,7 @@ void MoveState::draw(){
       int width = 15;
       DrawRectangleLines(349+frames*(width+5),99,width+2,width+2,DARKGRAY);
 
-      if((f==currentFrameNum && counter >= i) || f < currentFrameNum) {
+      if((f == currentFrameNum && counter >= i) || f < currentFrameNum) {
         DrawRectangle(350+frames*(width+5),100,width,width,color);
       }
       frames++;

@@ -18,7 +18,6 @@ class Game{
   InputReader* r3;
   Player* p1;
   Player* p2;
-  Vector2 playerSize = {50, 250};
   int groundPosition;
 
   public:

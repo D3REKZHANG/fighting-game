@@ -1,3 +1,4 @@
 game
 game.exe
 .cache
+**/*.o

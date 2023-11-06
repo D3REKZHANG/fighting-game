@@ -138,27 +138,31 @@ endif
 #rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 
 ## Define all source files required
-#SRC_DIR = src
-#OBJ_DIR = obj
+SRC_DIR = src
+OBJ_DIR = obj
 #
 ## Define all object files from source files
-#SRC = $(call rwildcard, *.c, *.cpp, *.h)
-#OBJS = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(wildcard src/*.cpp)) \
+			 $(patsubst $(SRC_DIR)/states/%.cpp,$(OBJ_DIR)/states/%.o,$(wildcard src/states/*.cpp))
 
-COMPILE = g++ src/*.cpp src/states/*.cpp -o game $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+COMPILE = $(CC) -o game $(OBJS) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+## COMPILE = $(CC) -o game $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
 RUN_DEBUG = gdb game -ex 'run'
 RUN = ./game
 
 # Default target entry
-all:
+all: $(OBJS)
 	${COMPILE}
 	${RUN}
 
-debug:
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CC) $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM) -c $< -o $@
+
+debug: $(OBJS)
 	${COMPILE}
 	${RUN_DEBUG}
 
-build:
+build: $(OBJS)
 	${COMPILE}
 
 start:

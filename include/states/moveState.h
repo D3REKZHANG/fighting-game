@@ -23,7 +23,7 @@ class MoveState : public State {
 public:
   Animation* animation;
   std::vector<Frame> frameData; 
-  int currentFrameNum = 0;
+  size_t currentFrameNum = 0;
   int counter = 0;
 
   MoveState(Player* player, Animation* animation, std::vector<Frame> frameData);

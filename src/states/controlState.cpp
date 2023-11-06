@@ -19,8 +19,10 @@ void ControlState::exiting() {
 State* ControlState::handleInput(Input input) {
   int motion = input.motion;
   if(motion == 4 || motion == 6){
-    if(motion == 4) player->vel.x = -player->speed;
-    if(motion == 6) player->vel.x = player->speed;
+    if(motion == 4) player->vel.x = -player->stats.walk_speed;
+    if(motion == 6) player->vel.x = player->stats.walk_speed;
+    player->setAnimation("run");
+    player->currentAnimation->active = true;
   }
   if(motion == 5){
     player->vel.x = 0;
@@ -31,7 +33,7 @@ State* ControlState::handleInput(Input input) {
   }
 
   if(input.button == LIGHT){
-    return player->move["thrust"];
+    return player->move["light"];
   }
   return nullptr;
 }
@@ -39,6 +41,7 @@ State* ControlState::handleInput(Input input) {
 State* ControlState::update(){
   player->vel = Vector2Add(player->vel, player->accel);
   player->pos = Vector2Add(player->pos, player->vel);
+  player->currentAnimation->tick();
   return nullptr;
 }
 
