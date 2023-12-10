@@ -11,7 +11,9 @@ std::string ControlState::getName() { return "CONTROL"; }
 void ControlState::init() {
   player->setAnimation("idle");
   player->currentAnimation->play();
+  player->size = player->defaultSize;
 }
+
 void ControlState::exiting() {
   player->currentAnimation->stop();
 }

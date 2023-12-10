@@ -1,6 +1,7 @@
 #include "spritesheet.h"
 #include "raylib.h"
 #include "util.h"
+#include <cassert>
 #include <cmath>
 
 Spritesheet::Spritesheet(Texture2D sheet, Vector2 dimensions)
@@ -10,6 +11,7 @@ Spritesheet::Spritesheet(Texture2D sheet, Vector2 dimensions)
 }
 
 void Spritesheet::draw(int n, Vector2 pos, bool inverse){
+  assert(num_cols > 0);
   float col = (n-1) % num_cols;
   float row = floor((n-1) / num_cols);
   float width = dimensions.x;

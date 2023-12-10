@@ -17,6 +17,7 @@ struct Frame {
   // boxes relative to character
   std::vector<Player::Box> hitbox;
   std::vector<Player::Box> hurtbox;
+  Vector2 size;
 };
 
 class MoveState : public State {

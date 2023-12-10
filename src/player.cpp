@@ -5,15 +5,13 @@
 #include "spritesheet.h"
 #include "animation.h"
 #include "moveState.h"
+#include "state.h"
 #include "util.h"
 #include "assetManager.h"
 #include <cassert>
 
 Player::Player(Game* game, InputReader* inputReader)
-  : game{game}, inputReader{inputReader}
-{
-  currentState = new ControlState(this);
-}
+  : game{game}, inputReader{inputReader} {}
 
 void Player::update(){
   State* newState;
@@ -48,7 +46,10 @@ void Player::draw(){
 }
 
 void Player::setAnimation(std::string anim_key){
-  assert(anim.find(anim_key) != anim.end());
+  if(!anim.contains(anim_key)) {
+    u::log("ERROR: animation key \"" + anim_key + "\" not found.");
+    assert(anim.contains(anim_key));
+  }
 
   currentAnimation = anim[anim_key];
 }

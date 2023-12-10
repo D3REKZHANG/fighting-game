@@ -64,7 +64,7 @@ endif
 #  -std=gnu99           defines C language mode (GNU C from 1999 revision)
 #  -Wno-missing-braces  ignore invalid warning (GCC bug 53119)
 #  -D_DEFAULT_SOURCE    use with -std=c99 on Linux and PLATFORM_WEB, required for timespec
-CFLAGS += -Wall -std=c++14 -D_DEFAULT_SOURCE -Wno-missing-braces -Wno-unused-function
+CFLAGS += -Wall -std=c++20 -D_DEFAULT_SOURCE -Wno-missing-braces -Wno-unused-function
 
 ifeq ($(BUILD_MODE),DEBUG)
     CFLAGS += -g -O0
@@ -84,7 +84,7 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
 endif
 # Define include paths for required headers
 # NOTE: Several external required libraries (stb and others)
-INCLUDE_PATHS = -Ilib -Ilib/external -Iinclude -Iinclude/states
+INCLUDE_PATHS = -Ilib -Ilib/external -Iinclude -Iinclude/states -Iinclude/characters
 
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
 		LDLIBS = -Llib
@@ -143,7 +143,8 @@ OBJ_DIR = obj
 #
 ## Define all object files from source files
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(wildcard src/*.cpp)) \
-			 $(patsubst $(SRC_DIR)/states/%.cpp,$(OBJ_DIR)/states/%.o,$(wildcard src/states/*.cpp))
+	   $(patsubst $(SRC_DIR)/states/%.cpp,$(OBJ_DIR)/states/%.o,$(wildcard src/states/*.cpp)) \
+	   $(patsubst $(SRC_DIR)/characters/%.cpp,$(OBJ_DIR)/characters/%.o,$(wildcard src/characters/*.cpp))
 
 COMPILE = $(CC) -o game $(OBJS) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
 ## COMPILE = $(CC) -o game $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
@@ -176,6 +177,5 @@ start:
 
 # Clean everything
 clean:
-	del *.o game* /s
+	rm obj/*.o obj/characters/* obj/states/* game*
 	@echo Cleaning done
-

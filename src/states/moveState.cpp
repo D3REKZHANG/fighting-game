@@ -40,6 +40,9 @@ State* MoveState::update(){
   player->vel = Vector2Add(player->vel, player->accel);
   player->pos = Vector2Add(player->pos, player->vel);
 
+  Vector2 size = getFrame().size;
+  if(size.x > 0 && size.y > 0) player->size = size;
+
   if(counter != frameData[currentFrameNum].frameCount) {
     counter++;
     return nullptr;

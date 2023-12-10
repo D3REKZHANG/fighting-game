@@ -24,6 +24,7 @@ class Player {
     Vector2 vel = {0,0};
     Vector2 accel = {0,0};
     Vector2 size;
+    Vector2 defaultSize;
     Game* game;
     bool inverse = false;
     CharacterStats stats = {5, 20};
@@ -34,7 +35,7 @@ class Player {
     InputReader* inputReader;
     
     Player(Game* game, InputReader* inputReader);
-    ~Player();
+    virtual ~Player();
     void update();
     void draw();
     void fireball();
@@ -53,15 +54,4 @@ class Player {
       Rectangle getTranslated(Player* p);
     };
 };
-
-class Celsius : public Player { 
-public:
-  Celsius(Game* game, InputReader* inputReader);
-};
-
-class Naruto : public Player { 
-public:
-  Naruto(Game* game, InputReader* inputReader);
-};
-
 #endif

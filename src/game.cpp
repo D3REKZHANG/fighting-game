@@ -1,5 +1,7 @@
 #include "game.h"
 #include "player.h"
+#include "naruto.h"
+#include "celsius.h"
 #include "inputReader.h"
 #include "raylib.h"
 #include "spritesheet.h"
