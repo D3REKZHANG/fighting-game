@@ -3,8 +3,13 @@
 #include "raymath.h"
 #include "util.h"
 #include "moveState.h"
+#include "game.h"
+#include <iostream>
+using namespace std;
 
-ControlState::ControlState(Player* player) : State(player) {}
+ControlState::ControlState(Player* player) : State(player) {
+  cout << player << endl;
+}
 
 std::string ControlState::getName() { return "CONTROL"; }
 
@@ -12,6 +17,7 @@ void ControlState::init() {
   player->setAnimation("idle");
   player->currentAnimation->play();
   player->size = player->defaultSize;
+  player->pos.y = player->game->getGroundPos()-player->size.y/2;
 }
 
 void ControlState::exiting() {
@@ -36,6 +42,9 @@ State* ControlState::handleInput(Input input) {
 
   if(input.button == LIGHT){
     return player->move["light"];
+  }
+  if(input.button == MEDIUM){
+    return player->move["medium"];
   }
   return nullptr;
 }

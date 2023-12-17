@@ -28,6 +28,7 @@ State* HurtState::handleInput(Input input) {
 State* HurtState::update(){
   player->vel = Vector2Add(player->vel, player->accel);
   player->pos = Vector2Add(player->pos, player->vel);
+  player->currentAnimation->tick();
 
   if(abs(player->vel.x) > 0.1) {
     player->accel.x = (player->vel.x < 0) ? 2 : -2;

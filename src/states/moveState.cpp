@@ -95,7 +95,7 @@ void MoveState::draw(){
 
 void MoveState::handleHit(Player* playerHit) {
   Vector2 forceVel = {static_cast<float>((playerHit->inverse) ? 10 : -10), 0};
-  playerHit->handleStateChange(new HurtState(playerHit, 20, forceVel));
+  playerHit->handleStateChange(new HurtState(playerHit, 100, forceVel));
 }
 
 std::vector<Player::Box> MoveState::getHurtbox() {

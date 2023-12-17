@@ -30,7 +30,8 @@ Input InputReader::read(){
   int motion = 3*key.y + key.x + 1;
 
   Button button; 
-  if(isDown(controls.a)) button = LIGHT;
+  if(isDown(controls.l)) button = LIGHT;
+  else if(isDown(controls.m)) button = MEDIUM;
   else button = NONE;
 
   Input input = { motion, button, GetTime() };

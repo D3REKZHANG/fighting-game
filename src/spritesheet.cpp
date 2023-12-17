@@ -4,8 +4,8 @@
 #include <cassert>
 #include <cmath>
 
-Spritesheet::Spritesheet(Texture2D sheet, Vector2 dimensions)
-  : sheet{sheet}, dimensions{dimensions} {
+Spritesheet::Spritesheet(Texture2D sheet, Vector2 dimensions, float scale)
+  : sheet{sheet}, dimensions{dimensions}, scale{scale} {
   num_cols = sheet.width/dimensions.x;
   num_rows = sheet.height/dimensions.y;
 }
@@ -17,7 +17,15 @@ void Spritesheet::draw(int n, Vector2 pos, bool inverse){
   float width = dimensions.x;
   float height = dimensions.y;
   // DrawRectangleV(u::topleft(pos, width, height), {width, height}, DARKGRAY);
-  DrawTextureRec(sheet, {col*width, row*height, inverse ? -width : width, height}, u::topleft(pos, width, height), WHITE);
+  Vector2 _pos = u::topleft(pos, width*scale, height*scale);
+  DrawTexturePro(
+    sheet,
+    { col*width, row*height, inverse ? -width : width, height },
+    { _pos.x, _pos.y, width*scale, height*scale },
+    {0, 0},
+    0,
+    WHITE
+  );
 }
 
 void Spritesheet::draw(int row, int col, Vector2 pos){

@@ -1,7 +1,5 @@
 #include "game.h"
 #include "player.h"
-#include "naruto.h"
-#include "celsius.h"
 #include "inputReader.h"
 #include "raylib.h"
 #include "spritesheet.h"
@@ -17,10 +15,12 @@ Game::Game(int width, int height):screenWidth{width},screenHeight{height}{
   assets();
 
   groundPosition = screenHeight - 50;
-  r1 = new InputReader(this, p1, ControlSet{KEYBOARD, -1, KEY_A, KEY_D, KEY_SPACE, KEY_S, KEY_J});
-  r2 = new InputReader(this, p2, ControlSet{KEYBOARD, -1, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_L});
+
+  r1 = new InputReader(this, p1, ControlSet{KEYBOARD, -1, KEY_A, KEY_D, KEY_SPACE, KEY_S, KEY_J, KEY_K, KEY_L});
+  r2 = new InputReader(this, p2, ControlSet{KEYBOARD, -1, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_U, KEY_I, KEY_O});
   r3 = new InputReader(this, p1, ControlSet{CONTROLLER, 0, 4, 2, 1, 3, 5});
-  p1 = new Celsius(this, r1);
+
+  p1 = new Adventurer(this, r1);
   p2 = new Naruto(this, r2);
 }
 
@@ -30,6 +30,8 @@ void Game::draw(){
   p2->draw();
   r1->drawQueue();
   DrawText(p1->currentState->getName().c_str(), 10, 70, 20, DARKGRAY);
+  DrawText(std::to_string(p2->pos.y).c_str(), 10, 90, 20, DARKGRAY);
+  DrawText(std::to_string(p2->size.y).c_str(), 500, 90, 20, DARKGRAY);
 }
 
 void detectHits(Player* attacker, Player* receiver) {
@@ -62,8 +64,8 @@ void Game::update(){
 }
 
 void Game::reset(){
-  p1->pos = {p1->size.x, groundPosition - p1->size.y/2};
-  p2->pos = {screenWidth - p1->size.x, groundPosition - p1->size.y/2};
+  p1->pos.x = p1->size.x;
+  p2->pos.x = screenWidth - p2->size.x;
   player1Score = 0;
   player2Score = 0;
 }

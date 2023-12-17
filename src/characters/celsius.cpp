@@ -1,4 +1,4 @@
-#include "celsius.h"
+#include "player.h"
 #include "moveState.h"
 #include "state.h"
 #include "util.h"
@@ -23,4 +23,5 @@ Celsius::Celsius(Game* game, InputReader* inputReader): Player(game, inputReader
   });
 
   currentState = new ControlState(this);
+  currentState->init();
 }

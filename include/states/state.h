@@ -36,8 +36,10 @@ public: \
   virtual void exiting(); \
   virtual std::vector<Player::Box> getHurtbox();
 
-class ControlState : public State { METHODS ControlState(Player* p); ~ControlState(); };
-class JumpState : public State { METHODS JumpState(Player* p); ~JumpState(); };
+#define STATE(Name) class Name : public State { METHODS Name(Player* p); ~Name(); };
+
+STATE(ControlState)
+STATE(JumpState)
 
 class HurtState : public State {
   METHODS

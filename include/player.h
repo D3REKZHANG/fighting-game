@@ -54,4 +54,14 @@ class Player {
       Rectangle getTranslated(Player* p);
     };
 };
+
+#define PLAYER(Name) class Name : public Player { \
+  public: \
+    Name(Game* game, InputReader* inputReader); \
+  };
+
+PLAYER(Celsius);
+PLAYER(Naruto);
+PLAYER(Adventurer);
+
 #endif

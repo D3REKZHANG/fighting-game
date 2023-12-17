@@ -26,7 +26,8 @@ enum ControllerType { KEYBOARD, CONTROLLER };
 struct ControlSet {
   ControllerType type;
   int controller_id;
-  int left, right, up, down, a;
+  int left, right, up, down;
+  int l, m, h, s;
 };
 
 class InputReader {
