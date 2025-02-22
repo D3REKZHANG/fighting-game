@@ -22,12 +22,23 @@ struct Frame {
 
 class MoveState : public State {
 public:
+  struct Properties {
+    float damage;
+    float knockbackVel;
+    int hurtFrames;
+
+    Properties(float damage, float knockbackVel, int hurtFrames = 30)
+      : damage{damage}, knockbackVel{knockbackVel}, hurtFrames{hurtFrames} {}
+  };
+
   Animation* animation;
+  Properties properties;
   std::vector<Frame> frameData; 
   size_t currentFrameNum = 0;
   int counter = 0;
+  bool hitHandled = false;
 
-  MoveState(Player* player, Animation* animation, std::vector<Frame> frameData);
+  MoveState(Player* player, Animation* animation, Properties properties, std::vector<Frame> frameData);
 
   virtual void init();
   virtual void exiting();
@@ -41,6 +52,7 @@ public:
   std::vector<Player::Box> getHurtbox();
   void handleHit(Player* playerHit);
   void reset();
+  void drawFrames();
 };
 
 #endif

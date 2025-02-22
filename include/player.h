@@ -15,7 +15,12 @@ class State;
 
 struct CharacterStats {
   float walk_speed;
-  int max_health;
+  float max_health;
+  float current_health;
+
+  CharacterStats(float walk_speed, float max_health): walk_speed{walk_speed}, max_health{max_health} {
+    current_health = max_health;
+  }
 };
 
 class Player {
@@ -39,9 +44,9 @@ class Player {
     void update();
     void draw();
     void fireball();
-    void thrust();
     void setAnimation(std::string anim_key);
     void handleStateChange(State* state);
+    MoveState* getMove(std::string);
 
     class Box {
     public:
@@ -63,5 +68,7 @@ class Player {
 PLAYER(Celsius);
 PLAYER(Naruto);
 PLAYER(Adventurer);
+PLAYER(Xun);
+PLAYER(Xero);
 
 #endif

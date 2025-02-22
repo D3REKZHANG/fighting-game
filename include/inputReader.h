@@ -1,10 +1,6 @@
 #ifndef INPUT_HANDLER_H
 #define INPUT_HANDLER_H
-#include <string>
 #include <deque>
-#include <unordered_map>
-#include <algorithm>
-#include "raylib.h"
 
 class Game;
 class Player;

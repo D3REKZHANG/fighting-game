@@ -8,10 +8,11 @@ void draw();
 Camera camera = { 0 };
 Game* game;
 
+const int screenWidth = 800;
+const int screenHeight = 450;
+
 int main()
 {
-  const int screenWidth = 800;
-  const int screenHeight = 450;
   
   InitWindow(screenWidth, screenHeight, "Fighting Game");
 
@@ -43,12 +44,9 @@ void draw()
 {
   BeginDrawing();
 
-    ClearBackground(RAYWHITE);
-
-    DrawText("Fighting Game", 10, 40, 20, DARKGRAY);
-
-    DrawFPS(10, 10);
-
     game->draw();
+
+    DrawFPS(10, screenHeight-35);
+
   EndDrawing();
 }

@@ -40,6 +40,15 @@ public: \
 
 STATE(ControlState)
 STATE(JumpState)
+STATE(DeathState)
+
+class BackdashState : public State {
+  METHODS;
+  int counter;
+  int frames;
+  BackdashState();
+  ~BackdashState();
+};
 
 class HurtState : public State {
   METHODS

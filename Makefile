@@ -177,5 +177,5 @@ start:
 
 # Clean everything
 clean:
-	rm obj/*.o obj/characters/* obj/states/* game*
+	rm ./obj/*.o ./obj/characters/* ./obj/states/* game*
 	@echo Cleaning done

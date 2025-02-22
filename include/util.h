@@ -24,10 +24,6 @@ namespace u {
     return {center_pos.x - width/2, center_pos.y - height/2};
   }
 
-  static Vector2 negate(Vector2 vec) {
-    return {-vec.x, -vec.y};
-  }
-
   static AssetManager* assets() {
     return AssetManager::getInstance();
   }

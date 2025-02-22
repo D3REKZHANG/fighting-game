@@ -2,6 +2,7 @@
 #include "player.h"
 #include "inputReader.h"
 #include "raylib.h"
+#include "raymath.h"
 #include "spritesheet.h"
 #include "util.h"
 #include "state.h"
@@ -20,18 +21,43 @@ Game::Game(int width, int height):screenWidth{width},screenHeight{height}{
   r2 = new InputReader(this, p2, ControlSet{KEYBOARD, -1, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_U, KEY_I, KEY_O});
   r3 = new InputReader(this, p1, ControlSet{CONTROLLER, 0, 4, 2, 1, 3, 5});
 
-  p1 = new Adventurer(this, r1);
-  p2 = new Naruto(this, r2);
+  p1 = new Xero(this, r1);
+  p2 = new Xun(this, r2);
+
+  // Initialize camera
+  camera.target = (Vector2){ static_cast<float>(screenWidth / 2.0f), static_cast<float>(groundPosition) };
+  camera.offset = (Vector2){ static_cast<float>(screenWidth / 2.0f), static_cast<float>(groundPosition) };
+  camera.rotation = 0.0f;
+  camera.zoom = 1.0f;
+
+  training = true;
 }
 
 void Game::draw(){
-  DrawRectangle(0, groundPosition, screenWidth, 50, BLACK);
+  BeginMode2D(camera);
+
+  ClearBackground(LIGHTGRAY);
+
+  DrawRectangle(-200, groundPosition, screenWidth+200*2, 200, DARKGRAY); // ground
+  // DrawRectangle(-120, -200, 100, screenHeight+150, DARKGRAY); // left wall
+  // DrawRectangle(screenWidth+20, -200, 100, screenHeight+150, DARKGRAY); // right wall
   p1->draw();
   p2->draw();
-  r1->drawQueue();
-  DrawText(p1->currentState->getName().c_str(), 10, 70, 20, DARKGRAY);
-  DrawText(std::to_string(p2->pos.y).c_str(), 10, 90, 20, DARKGRAY);
-  DrawText(std::to_string(p2->size.y).c_str(), 500, 90, 20, DARKGRAY);
+  // r1->drawQueue();
+  // DrawText(p1->currentState->getName().c_str(), 10, 70, 20, DARKGRAY);
+
+  EndMode2D();
+
+  // move frames
+  if(p1->currentState->getName() == "MOVE") static_cast<MoveState*>(p1->currentState)->drawFrames();
+  if(p2->currentState->getName() == "MOVE") static_cast<MoveState*>(p2->currentState)->drawFrames();
+
+  // healthbar
+  const Vector2 bar = {300, 20};
+  DrawRectangle(10,10, bar.x, bar.y, WHITE);
+  DrawRectangle(screenWidth-bar.x-10, 10, 300, bar.y, WHITE);
+  DrawRectangle(10,10, p1->stats.current_health/p1->stats.max_health * bar.x, bar.y, RED);
+  DrawRectangle(screenWidth-p2->stats.current_health/p2->stats.max_health * bar.x-10, 10, p2->stats.current_health/p2->stats.max_health * bar.x, bar.y, RED);
 }
 
 void detectHits(Player* attacker, Player* receiver) {
@@ -45,7 +71,6 @@ void detectHits(Player* attacker, Player* receiver) {
     for(Player::Box hurtbox : receiver->currentState->getHurtbox()) {
       if(CheckCollisionRecs(hitbox.getTranslated(attacker), hurtbox.getTranslated(receiver))) {
         attackerState->handleHit(receiver);
-        return;
       }
     }
   }
@@ -61,6 +86,17 @@ void Game::update(){
   // detect crossover, update inverse
   p1->inverse = p1->pos.x > p2->pos.x;
   p2->inverse = !p1->inverse;
+
+  // middle of both players, clamping so that wall edges are always at edge of screen
+  float targetPosition = Clamp((p1->pos.x + p2->pos.x) * 0.5f, screenWidth/4.0f, screenWidth - screenWidth/4.0f);
+  
+  float dist = fabsf(camera.target.x - targetPosition);
+  camera.target.x = Lerp(camera.target.x, targetPosition, 0.01f + 0.002f*dist);
+
+  // Calculate zoom level based on characters' distance
+  float distance = fabsf(p1->pos.x-p2->pos.x);
+  float newZoom = screenWidth / (distance * 1.3f); // Adjust multiplier as needed
+  camera.zoom = Clamp(newZoom, 0.93f, 1.5f); // Clamp zoom level to desired range
 }
 
 void Game::reset(){
@@ -86,4 +122,5 @@ Game::~Game() {
   delete r1;
   delete r2;
   delete r3;
+  // delete camera;
 }

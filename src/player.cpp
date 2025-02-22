@@ -54,6 +54,15 @@ void Player::setAnimation(std::string anim_key){
   currentAnimation = anim[anim_key];
 }
 
+MoveState* Player::getMove(std::string move_key) {
+  if(!move.contains(move_key)) {
+    u::log("ERROR: move key \"" + move_key + "\" not found.");
+    return nullptr;
+  }
+
+  return move[move_key];
+}
+
 Player::Box::Box(Rectangle rec): relativeBounds(rec) {}
 Player::Box::Box(): relativeBounds(Rectangle{-1,0,0,0}) {}
 Player::Box::Box(float x, float y, float w, float h): relativeBounds(Rectangle{x,y,w,h}) {}

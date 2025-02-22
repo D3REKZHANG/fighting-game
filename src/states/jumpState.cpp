@@ -8,10 +8,10 @@ JumpState::JumpState(Player* p): State(p) {}
 std::string JumpState::getName() { return "JUMP"; }
 
 void JumpState::init() {
-  player->vel.y = -30;
+  player->vel.y = -18;
   player->pos.y -= 1;
 
-  player->setAnimation("idle");
+  player->setAnimation("jump");
   player->currentAnimation->play();
 }
 void JumpState::exiting() {
@@ -32,7 +32,7 @@ State* JumpState::update() {
     player->vel = {0, 0};
     return new ControlState(player);
   } else {
-    player->accel.y = 3; // gravity
+    player->accel.y = 1.2; // gravity
   }
 
   return nullptr;

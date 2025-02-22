@@ -1,12 +1,13 @@
 #include "moveState.h"
+#include "game.h"
 #include "player.h"
 #include "raylib.h"
 #include "state.h"
 #include "util.h"
 #include "raymath.h"
 
-MoveState::MoveState(Player* player, Animation* animation, std::vector<Frame> frameData)
-: State(player), animation{animation}, frameData{frameData} { }
+MoveState::MoveState(Player* player, Animation* animation, Properties properties, std::vector<Frame> frameData)
+: State(player), animation{animation}, properties{properties}, frameData{frameData} { }
 
 std::string MoveState::getName() { return "MOVE"; }
 
@@ -18,6 +19,7 @@ void MoveState::init() {
 
 void MoveState::exiting() {
   animation->stop();
+  hitHandled = false;
 }
 
 State* MoveState::handleInput(Input input){
@@ -35,7 +37,7 @@ State* MoveState::handleInput(Input input){
 State* MoveState::update(){
 
   player->vel = getFrame().vel;
-  if(player->inverse) player->vel = u::negate(player->vel);
+  if(player->inverse) player->vel = Vector2Negate(player->vel);
 
   player->vel = Vector2Add(player->vel, player->accel);
   player->pos = Vector2Add(player->pos, player->vel);
@@ -70,8 +72,10 @@ void MoveState::draw(){
     DrawRectangleLinesEx(hurtbox.getTranslated(player), 1, GREEN);
   }
 
+}
+
+void MoveState::drawFrames() {
   // Draw Frame Data
-  DrawText(std::to_string(currentFrameNum).c_str(), 300,50, 30, DARKGRAY);
   int frames = 0;
   for(size_t f=0;f<frameData.size();f++) {
     Color color;
@@ -83,10 +87,10 @@ void MoveState::draw(){
     }
     for(int i=0;i<frameData[f].frameCount;i++) {
       int width = 15;
-      DrawRectangleLines(349+frames*(width+5),99,width+2,width+2,DARKGRAY);
+      DrawRectangleLines(12+frames*(width+5),59,width+2,width+2,DARKGRAY);
 
       if((f == currentFrameNum && counter >= i) || f < currentFrameNum) {
-        DrawRectangle(350+frames*(width+5),100,width,width,color);
+        DrawRectangle(13+frames*(width+5),60,width,width,color);
       }
       frames++;
     }
@@ -94,8 +98,13 @@ void MoveState::draw(){
 }
 
 void MoveState::handleHit(Player* playerHit) {
-  Vector2 forceVel = {static_cast<float>((playerHit->inverse) ? 10 : -10), 0};
-  playerHit->handleStateChange(new HurtState(playerHit, 100, forceVel));
+  if(hitHandled) return;
+  if(playerHit->currentState->getName() == "DEATH") return;
+  hitHandled = true;
+  Vector2 forceVel = {static_cast<float>((playerHit->inverse) ? 1 : -1) * properties.knockbackVel, 0};
+  playerHit->handleStateChange(new HurtState(playerHit, properties.hurtFrames, forceVel));
+  u::log(player->game->training);
+  if(!player->game->training) playerHit->stats.current_health -= properties.damage;
 }
 
 std::vector<Player::Box> MoveState::getHurtbox() {

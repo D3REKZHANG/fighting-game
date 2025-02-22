@@ -46,6 +46,9 @@ State* HurtState::update(){
 
   counter++;
   if(counter > frames) {
+    if(player->stats.current_health <= 0) {
+      return new DeathState(player);
+    }
     return new ControlState(player);
   }
 

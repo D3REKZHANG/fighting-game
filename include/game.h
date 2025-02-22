@@ -20,7 +20,10 @@ class Game{
   Player* p2;
   int groundPosition;
 
+  Camera2D camera = { 0 };
+
   public:
+    bool training;
     Game(int width, int height);
     ~Game();
     void draw();
